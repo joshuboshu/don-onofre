@@ -1,0 +1,79 @@
+{% load static %}
+
+<div class="card bg-dark text-white shadow-sm">
+    <div class="card-header bg-primary">
+        <h5 class="card-title mb-0 text-center">Carro de Compras</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="cart-body">
+                    {% if request.session.carro.items %}
+                        {% for key, value in request.session.carro.items %}
+                        <tr id="product-row-{{ value.producto_id }}">
+                            <td>{{value.nombre}}</td>
+                            <td>
+                                <span id="quantity-{{ value.producto_id }}" class="badge bg-secondary">{{value.cantidad}}</span>
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group" aria-label="Acciones de producto">
+                                    <button class="btn btn-sm btn-outline-success" onclick="updateCart('{{ value.producto_id }}', 'add')">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning" onclick="updateCart('{{ value.producto_id }}', 'subtract')">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                                <span id="price-{{ value.producto_id }}" class="ms-2">{{value.precio}} ₲</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="3">
+                                <div class="alert alert-danger text-center mb-0">
+                                    Sin productos
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-end">
+                            <strong>Total: <span id="total-price" class="text-primary">{{importe_total_carro}}</span> ₲</strong>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer text-center">
+        {% if request.session.carro.items %}
+        <a href="{% url 'carro:cart_view' %}" class="btn btn-primary">
+            <i class="fas fa-shopping-cart me-2"></i>Ir al Carrito
+        </a>
+        {% else %}
+        <a href="{% url 'Tienda' %}" class="btn btn-primary">
+            <i class="fas fa-store me-2"></i>Ir a la Tienda
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'proyectowebapp/css/widget.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+<script src="{% static 'proyectowebapp/js/widget.js' %}"></script>
+{% endblock %}

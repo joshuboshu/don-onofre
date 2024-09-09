@@ -1,0 +1,101 @@
+{% extends "proyectowebapp/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'proyectowebapp/css/carro.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4 text-center">Carrito de Compras</h1>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cart-body">
+                                {% if request.session.carro.items %}
+                                    {% for key, value in request.session.carro.items %}
+                                    <tr id="product-row-{{ value.producto_id }}">
+                                        <td>{{value.nombre}}</td>
+                                        <td id="quantity-{{ value.producto_id }}">{{value.cantidad}}</td>
+                                        <td>
+                                            <span id="price-{{ value.producto_id }}">{{value.precio}}</span> ₲
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group" aria-label="Acciones de producto">
+                                                <button class="btn btn-sm btn-outline-success" onclick="updateCart('{{ value.producto_id }}', 'add')">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-warning" onclick="updateCart('{{ value.producto_id }}', 'subtract')">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="updateCart('{{ value.producto_id }}', 'remove')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4">
+                                            <div class="alert alert-info text-center">
+                                                El carrito está vacío
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Resumen del Pedido</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="mb-3">Total a pagar: <span id="total-price" class="font-weight-bold">{{importe_total_carro}}</span> ₲</h6>
+                    <h6>Lista de productos:</h6>
+                    <ul id="summary-list" class="list-group list-group-flush mb-3">
+                        {% for key, value in request.session.carro.items %}
+                        <li id="summary-item-{{ value.producto_id }}" class="list-group-item d-flex justify-content-between align-items-center">
+                            {{value.nombre}}
+                            <span class="badge bg-primary rounded-pill">{{value.cantidad}}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="d-grid gap-2">
+                        {% if request.session.carro.items %}
+                        <a href="{% url 'pedidos:checkout' %}" class="btn btn-success">
+                            <i class="fas fa-shopping-cart me-2"></i>Hacer Pedido
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'Tienda' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-store me-2"></i>Volver a la Tienda
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+<script src="{% static 'proyectowebapp/js/carro.js' %}"></script>
+{% endblock %}

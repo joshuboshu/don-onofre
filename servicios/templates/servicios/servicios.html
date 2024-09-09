@@ -1,0 +1,80 @@
+{% extends 'proyectowebapp/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'proyectowebapp/css/servicios.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">Nuestros Servicios</h1>
+
+    {% for servicio in servicios %}
+    <section class="service-section mb-5">
+        <div class="card shadow-sm overflow-hidden">
+            <div class="row g-0">
+                <div class="col-md-6">
+                    <img src="{{ servicio.imagen.url }}" class="img-fluid w-100 h-100 object-fit-cover" alt="{{ servicio.titulo }}">
+                </div>
+                <div class="col-md-6 d-flex align-items-center">
+                    <div class="card-body">
+                        <h2 class="card-title h3 mb-3">{{ servicio.titulo }}</h2>
+                        <p class="card-text">{{ servicio.contenido }}</p>
+                        <a href="#" class="btn btn-primary mt-3">Más información</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% empty %}
+    <div class="alert alert-info text-center" role="alert">
+        <i class="fas fa-info-circle me-2"></i>No hay servicios disponibles en este momento.
+    </div>
+    {% endfor %}
+</div>
+
+{% if servicios %}
+<section class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">¿Por qué elegir nuestros servicios?</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-medal fa-3x mb-3"></i>
+                        <h3 class="h5 mb-3">Calidad Garantizada</h3>
+                        <p class="mb-0">Ofrecemos servicios de la más alta calidad, respaldados por nuestra experiencia y compromiso.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-users fa-3x mb-3"></i>
+                        <h3 class="h5 mb-3">Equipo Profesional</h3>
+                        <p class="mb-0">Nuestro equipo de expertos está altamente capacitado para brindar el mejor servicio posible.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-clock fa-3x mb-3"></i>
+                        <h3 class="h5 mb-3">Atención Rápida</h3>
+                        <p class="mb-0">Respondemos a tus necesidades de manera eficiente y oportuna, valorando tu tiempo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="cta-section py-5 text-white text-center">
+    <div class="container">
+        <h2 class="mb-4">¿Listo para comenzar?</h2>
+        <p class="lead mb-4">Contáctanos hoy mismo para obtener más información sobre nuestros servicios.</p>
+        <a href="{% url 'Contacto' %}" class="btn btn-light btn-lg">Contactar ahora</a>
+    </div>
+</section>
+{% endblock %}

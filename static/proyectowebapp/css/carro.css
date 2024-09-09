@@ -1,0 +1,27 @@
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card-header {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.table th {
+    font-weight: 600;
+}
+
+.btn-group .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+.list-group-item {
+    background-color: transparent;
+    border: none;
+    padding: 0.5rem 0;
+}
+
+.badge {
+    font-size: 0.8rem;
+}

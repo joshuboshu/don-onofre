@@ -1,0 +1,43 @@
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card-header {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.table-responsive {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.btn-group .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+.badge {
+    font-size: 0.8rem;
+}
+
+.alert {
+    margin-bottom: 0;
+}
+
+.text-primary {
+    color: var(--bs-primary) !important;
+}
+
+.btn-primary {
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: var(--bs-primary-dark);
+    border-color: var(--bs-primary-dark);
+}

@@ -1,0 +1,27 @@
+{% extends "proyectowebapp/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Confirmación de Pedido</h1>
+    {% if pedido.adamspay_status == "paid" %}
+        <div class="alert alert-success" role="alert">
+            ¡Tu pedido ha sido procesado con éxito!
+        </div>
+        <h3>Detalles del Pedido:</h3>
+        <p>Número de Pedido: {{ pedido.id }}</p>
+        <p>Fecha de Pago: {{ pedido.paid_at }}</p>
+        <h4>Productos:</h4>
+        <ul>
+            {% for linea in pedido.lineapedido_set.all %}
+                <li>{{ linea.producto.nombre }} - Cantidad: {{ linea.cantidad }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            El pago de tu pedido aún no se ha completado. Por favor, intenta nuevamente.
+        </div>
+    {% endif %}
+    <a href="{% url 'Tienda' %}" class="btn btn-primary">Volver a la Tienda</a>
+</div>
+{% endblock %}
