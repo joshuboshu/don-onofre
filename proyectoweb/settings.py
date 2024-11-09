@@ -3,25 +3,19 @@ from django.contrib.messages import constants as mensajes_de_error
 from dotenv import load_dotenv
 import os
 
+# Cargar variables de entorno desde un archivo .env
 load_dotenv()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Definición de rutas
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Seguridad
+SECRET_KEY = os.getenv('SECRET_KEY', 'valor_por_defecto')  # Clave secreta para la producción
+DEBUG = False  # Establecer en False para producción
+ALLOWED_HOSTS = ['127.0.0.1']  # Hosts permitidos para evitar ataques de DNS spoofing
+BASE_URL = 'http://localhost:8000'  # URL base para generar enlaces
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'valor_por_defecto')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app']
-
-BASE_URL = 'http://localhost:8000'
-
-
-# Application definition
-
+# Aplicaciones instaladas
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,9 +37,10 @@ INSTALLED_APPS = [
     'rules', 
 ]
 
+# Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Para servir archivos estáticos en producción
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -54,103 +49,77 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Rutas principales
 ROOT_URLCONF = 'proyectoweb.urls'
 
+# Configuración de plantillas
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ BASE_DIR / 'templates'],
-        'APP_DIRS': True,
+        'DIRS': [ BASE_DIR / 'templates'],  # Directorios de plantillas
+        'APP_DIRS': True,  # Para buscar plantillas dentro de cada aplicación
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'carro.context_processor.importe_total_carro',
+                'carro.context_processor.importe_total_carro',  # Procesador de contexto personalizado
             ],
         },
     },
 ]
 
+# Aplicación WSGI para desplegar el proyecto
 WSGI_APPLICATION = 'proyectoweb.wsgi.app'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+# Configuración de la base de datos
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / "db.sqlite3",
+        'ENGINE': 'django.db.backends.sqlite3',  # Motor de base de datos
+        'NAME': BASE_DIR / "db.sqlite3",  # Archivo de la base de datos SQLite
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
+# Validadores de contraseñas
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
-LANGUAGE_CODE = 'es-es'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
-
+# Internacionalización y zona horaria
+LANGUAGE_CODE = 'es-es'  # Configuración de idioma
+TIME_ZONE = 'UTC'  # Configuración de zona horaria
+USE_I18N = True  # Habilitar traducciones
+USE_TZ = True  # Habilitar soporte para zonas horarias
 SITE_ID = 1
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Archivos estáticos (CSS, JavaScript, imágenes)
+STATIC_URL = '/static/'  # URL de los archivos estáticos
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Directorios adicionales de archivos estáticos
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Directorio de salida de los archivos estáticos
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # Uso de WhiteNoise para producción
 
 STATICFILES_IGNORE_PATTERNS = [
-    "proyectowebapp/vendor/font-awesome/less/*.less",
+    "proyectowebapp/vendor/font-awesome/less/*.less",  # Ignorar archivos .less de FontAwesome
 ]
 
-MEDIA_URL = '/media/'
-# /data/web/media
-MEDIA_ROOT = BASE_DIR / 'media'
+# Archivos multimedia (imagenes, videos, etc.)
+MEDIA_URL = '/media/'  # URL para acceder a los archivos de medios
+MEDIA_ROOT = BASE_DIR / 'media'  # Directorio donde se almacenan los archivos de medios
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+# Configuración de correo
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "tucorreo@gmail.com"  # Cambia este valor por tu correo real
+EMAIL_HOST_PASSWORD = "tupassword"  # Cambia este valor por tu contraseña real
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Configuracion de contacto
-EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST="smpt.gmail.com"
-EMAIL_USE_TLS=True
-EMAIL_PORT=587
-EMAIL_HOST_USER="tucorreo@gmail.com"
-EMAIL_HOST_PASSWORD="tupassword"
-
-CRISPY_TEMPLATE_PACK='bootstrap4'
-
+# Formateo de mensajes de error en el frontend
 MESSAGE_TAGS = {
     mensajes_de_error.DEBUG: 'debug',
     mensajes_de_error.INFO: 'info',
@@ -159,8 +128,14 @@ MESSAGE_TAGS = {
     mensajes_de_error.ERROR: 'danger',
 }
 
+# Configuración de formularios
+CRISPY_TEMPLATE_PACK = 'bootstrap4'  # Paquete de plantillas para formularios con Bootstrap
 
+# Configuración de autenticación
 AUTHENTICATION_BACKENDS = (
-    'rules.permissions.ObjectPermissionBackend',
-    'django.contrib.auth.backends.ModelBackend',
+    'rules.permissions.ObjectPermissionBackend',  # Usar django-rules para permisos de objetos
+    'django.contrib.auth.backends.ModelBackend',  # Backend predeterminado para autenticación
 )
+
+# Tipo de campo de clave primaria por defecto
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

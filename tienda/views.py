@@ -35,6 +35,7 @@ def agregar_producto(request):
         precio = request.POST.get("precio")
         disponibilidad = request.POST.get("disponibilidad") == 'on'
         imagen = request.FILES.get("imagen")
+        
 
         if nombre and categoria_id and precio:
             categoria = get_object_or_404(CategoriaProd, id=categoria_id)
