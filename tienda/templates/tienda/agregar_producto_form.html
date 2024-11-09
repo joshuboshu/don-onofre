@@ -1,4 +1,27 @@
-<form method="post" enctype="multipart/form-data">
+<form id="add-product-form" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    <div class="form-group">
+        <label for="nombre">Nombre del Producto</label>
+        <input type="text" name="nombre" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="categorias">Categoría</label>
+        <select name="categorias" class="form-control" required>
+            {% for categoria in categorias %}
+                <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="precio">Precio</label>
+        <input type="number" name="precio" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="disponibilidad">Disponibilidad</label>
+        <input type="checkbox" name="disponibilidad" class="form-check-input">
+    </div>
+    <div class="form-group">
+        <label for="imagen">Imagen</label>
+        <input type="file" name="imagen" class="form-control-file">
+    </div>
 </form>

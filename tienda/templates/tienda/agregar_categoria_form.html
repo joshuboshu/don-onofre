@@ -1,8 +1,7 @@
-<form method="post" enctype="multipart/form-data">
+<form id="add-category-form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="submit" class="btn btn-primary">Guardar Categoría</button>
+    <div class="form-group">
+        <label for="nombre">Nombre de la Categoría</label>
+        <input type="text" name="nombre" class="form-control" required>
     </div>
 </form>

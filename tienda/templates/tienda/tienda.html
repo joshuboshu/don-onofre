@@ -36,6 +36,7 @@
             opacity: 0;
             transform: translateY(-30px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -123,7 +124,9 @@
     }
 
     /* Campos de entrada */
-    input[type="text"], input[type="number"], input[type="file"] {
+    input[type="text"],
+    input[type="number"],
+    input[type="file"] {
         border-radius: 5px;
         padding: 10px;
         font-size: 16px;
@@ -131,7 +134,9 @@
         box-sizing: border-box;
     }
 
-    input[type="text"]:focus, input[type="number"]:focus, input[type="file"]:focus {
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="file"]:focus {
         border-color: #007bff;
         box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
     }
@@ -187,11 +192,11 @@
 
             <div class="card-body" id="cart-widget">
                 {% if request.user.is_authenticated %}
-                    {% include "carro/widget.html" %}
+                {% include "carro/widget.html" %}
                 {% else %}
-                    <div class="alert alert-warning" role="alert">
-                        <i class="fas fa-exclamation-triangle me-2"></i>Iniciar sesión para ver el carrito.
-                    </div>
+                <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Iniciar sesión para ver el carrito.
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -207,7 +212,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body" id="add-product-form-container">
-                <!-- El formulario se cargará con AJAX aquí -->
+                <!-- Formulario cargado dinámicamente aquí -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -225,18 +230,8 @@
                 <h5 class="modal-title">Agregar Categoría</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
-            <div class="modal-body">
-                <form action="{% url 'agregar_categoria' %}" method="POST" id="add-category-form">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="nombre" class="form-label">Nombre de la categoría</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" required>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Guardar Categoría</button>
-                    </div>
-                </form>
+            <div class="modal-body" id="add-category-form-container">
+                <!-- Formulario cargado dinámicamente aquí -->
             </div>
         </div>
     </div>
@@ -244,42 +239,78 @@
 
 {% endblock %}
 
-
 {% block extra_js %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-$(document).ready(function() {
-    // Abrir el popup de agregar producto
-    $('#add-product-btn').click(function() {
-        $.ajax({
-            url: "{% url 'agregar_producto' %}",
-            method: "GET",
-            success: function(data) {
-                $('#add-product-form-container').html(data);
-                $('#add-product-modal').modal('show');
-            }
-        });
-    });
+    $(document).ready(function () {
+        function loadModalContent(url, modalSelector, containerSelector) {
+            $.ajax({
+                url: url,
+                method: "GET",
+                success: function (data) {
+                    $(containerSelector).html(data);
+                    $(modalSelector).modal('show');
+                },
+                error: function () {
+                    alert("Hubo un error al cargar el formulario.");
+                }
+            });
+        }
 
-    // Abrir el popup de agregar categoría
-    $('#add-category-btn').click(function() {
-        $('#add-category-modal').modal('show');
-    });
-    
-    // Abrir el popup de agregar categoría
-    $('#add-category-btn').click(function() {
-        $.ajax({
-            url: "{% url 'agregar_categoria' %}",
-            method: "GET",
-            success: function(data) {
-                $('#add-category-modal .modal-body').html(data);  // Cargar el formulario dinámicamente en el modal
-                $('#add-category-modal').modal('show');  // Mostrar el modal
-            },
-            error: function(xhr, status, error) {
-                alert("Hubo un error al cargar el formulario.");
-            }
+        // Cargar formulario de agregar producto
+        $('#add-product-btn').click(function () {
+            loadModalContent("{% url 'agregar_producto' %}", '#add-product-modal', '#add-product-form-container');
         });
-    });
+
+        // Cargar formulario de agregar categoría
+        $('#add-category-btn').click(function () {
+            loadModalContent("{% url 'agregar_categoria' %}", '#add-category-modal', '#add-category-form-container');
+        });
+
+        // Enviar formulario de producto
+        $('#add-product-form-container').on('submit', '#add-product-form', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "{% url 'agregar_producto' %}",
+                method: "POST",
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        $('#add-product-modal').modal('hide');
+                        alert(response.message);
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert("Error al agregar el producto.");
+                }
+            });
+        });
+
+        // Enviar formulario de categoría
+        $('#add-category-form-container').on('submit', '#add-category-form', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "{% url 'agregar_categoria' %}",
+                method: "POST",
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        $('#add-category-modal').modal('hide');
+                        alert(response.message);
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert("Error al agregar la categoría.");
+                }
+            });
+        });
     });
 </script>
+
 {% endblock %}
