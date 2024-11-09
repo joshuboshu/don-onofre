@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
     'pedidos',
+    'rules', 
 ]
 
 MIDDLEWARE = [
@@ -158,7 +159,8 @@ MESSAGE_TAGS = {
     mensajes_de_error.ERROR: 'danger',
 }
 
-# Configuración de AdamsPay
-ADAMSPAY_API_KEY = os.getenv('ADAMSPAY_API_KEY')
-ADAMSPAY_API_SECRET = os.getenv('ADAMSPAY_API_SECRET')
-ADAMSPAY_WEBSITE_SLUG = os.getenv('ADAMSPAY_WEBSITE_SLUG')
+
+AUTHENTICATION_BACKENDS = (
+    'rules.permissions.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
