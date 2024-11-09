@@ -80,16 +80,8 @@ WSGI_APPLICATION = 'proyectoweb.wsgi.app'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.zxrqnoxgqkipburpslng',
-        'PASSWORD': os.getenv("SUPABASE_PASSWORD"),
-        'HOST': os.getenv("SUPABASE_HOST"),
-        'PORT': '6543',
-        'OPTIONS': {
-            "sslmode": 'verify-full',
-            'sslrootcert': os.path.join(BASE_DIR, 'prod-ca-2021.crt'),
-        }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
 
