@@ -4,8 +4,8 @@
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <link rel="stylesheet" href="{% static 'proyectowebapp/css/tienda.css' %}">
-<!-- Estilos personalizados para el modal y el botón -->
 <style>
+    /* Estilo del modal */
     .modal-content {
         border-radius: 10px;
         border: none;
@@ -31,24 +31,6 @@
         text-align: center;
     }
 
-    /* Botón "Agregar Producto" */
-    #add-product-btn {
-        width: 100%;
-        padding: 15px;
-        font-size: 18px;
-        background-color: #28a745;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        margin-bottom: 20px;
-    }
-
-    #add-product-btn:hover {
-        background-color: #218838;
-    }
-
-    /* Efecto de desvanecimiento para el modal */
     @keyframes modal-fade-in {
         from {
             opacity: 0;
@@ -60,20 +42,110 @@
         }
     }
 
-    /* Estilo del formulario */
+    /* Botón "Agregar Producto" */
+    #add-product-btn {
+        width: 100%;
+        padding: 15px;
+        font-size: 18px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        margin-bottom: 10px;
+    }
+
+    #add-product-btn:hover {
+        background-color: #218838;
+    }
+
+    /* Botón "Agregar Categoria" */
+    #add-category-btn {
+        width: 100%;
+        padding: 15px;
+        font-size: 18px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    #add-category-btn:hover {
+        background-color: #0056b3;
+    }
+
+    /* Estilo del formulario en el modal */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
     .form-control {
         border-radius: 5px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    }
+
+    .form-label {
+        font-weight: bold;
+        font-size: 16px;
+        color: #333;
     }
 
     .btn-primary {
         background-color: #007bff;
         border: none;
         border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
     }
 
     .btn-primary:hover {
         background-color: #0056b3;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+    /* Campos de entrada */
+    input[type="text"], input[type="number"], input[type="file"] {
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    input[type="text"]:focus, input[type="number"]:focus, input[type="file"]:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    }
+
+    select.form-control {
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+        width: 100%;
+    }
+
+    select.form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
     }
 </style>
 {% endblock %}
@@ -99,17 +171,20 @@
                         </div>
                     </div>
                 </div>
+                {% empty %}
+                <p class="text-center">No hay productos disponibles.</p>
                 {% endfor %}
             </div>
         </div>
 
         <div class="col-lg-3 mt-4 mt-lg-0">
-            <!-- Botón Agregar Producto -->
             <button class="btn" id="add-product-btn">
                 <i class="fas fa-plus me-2"></i>Agregar Producto
             </button>
-            
-            <!-- Widget del carrito -->
+            <button class="btn" id="add-category-btn">
+                <i class="fas fa-tag me-2"></i>Agregar Categoría
+            </button>
+
             <div class="card-body" id="cart-widget">
                 {% if request.user.is_authenticated %}
                     {% include "carro/widget.html" %}
@@ -142,7 +217,33 @@
     </div>
 </div>
 
+<!-- Modal para agregar una nueva categoría -->
+<div id="add-category-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Categoría</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'agregar_categoria' %}" method="POST" id="add-category-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="nombre" class="form-label">Nombre de la categoría</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Categoría</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
+
 
 {% block extra_js %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -151,8 +252,8 @@ $(document).ready(function() {
     // Abrir el popup de agregar producto
     $('#add-product-btn').click(function() {
         $.ajax({
-            url: '{% url "agregar_producto" %}',  // Asegúrate de tener esta URL definida
-            type: 'GET',
+            url: "{% url 'agregar_producto' %}",
+            method: "GET",
             success: function(data) {
                 $('#add-product-form-container').html(data);
                 $('#add-product-modal').modal('show');
@@ -160,25 +261,25 @@ $(document).ready(function() {
         });
     });
 
-    // Guardar el nuevo producto
-    $('#save-product-btn').click(function() {
-        var form = $('#add-product-form-container form');
+    // Abrir el popup de agregar categoría
+    $('#add-category-btn').click(function() {
+        $('#add-category-modal').modal('show');
+    });
+    
+    // Abrir el popup de agregar categoría
+    $('#add-category-btn').click(function() {
         $.ajax({
-            url: form.attr('action'),
-            type: 'POST',
-            data: new FormData(form[0]),
-            processData: false,
-            contentType: false,
+            url: "{% url 'agregar_categoria' %}",
+            method: "GET",
             success: function(data) {
-                if (data.success) {
-                    $('#add-product-modal').modal('hide');
-                    location.reload(); // Recargar la página para ver el nuevo producto
-                } else {
-                    alert('Error: ' + JSON.stringify(data.errors));
-                }
+                $('#add-category-modal .modal-body').html(data);  // Cargar el formulario dinámicamente en el modal
+                $('#add-category-modal').modal('show');  // Mostrar el modal
+            },
+            error: function(xhr, status, error) {
+                alert("Hubo un error al cargar el formulario.");
             }
         });
     });
-});
+    });
 </script>
 {% endblock %}
