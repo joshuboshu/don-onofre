@@ -4,6 +4,78 @@
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <link rel="stylesheet" href="{% static 'proyectowebapp/css/tienda.css' %}">
+<!-- Estilos personalizados para el modal y el botón -->
+<style>
+    .modal-content {
+        border-radius: 10px;
+        border: none;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        animation: modal-fade-in 0.3s ease-in-out;
+    }
+
+    .modal-header {
+        background-color: #007bff;
+        color: white;
+        border-radius: 10px 10px 0 0;
+        text-align: center;
+    }
+
+    .modal-body {
+        padding: 30px;
+        background-color: #f8f9fa;
+        border-radius: 0 0 10px 10px;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #dee2e6;
+        text-align: center;
+    }
+
+    /* Botón "Agregar Producto" */
+    #add-product-btn {
+        width: 100%;
+        padding: 15px;
+        font-size: 18px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+    }
+
+    #add-product-btn:hover {
+        background-color: #218838;
+    }
+
+    /* Efecto de desvanecimiento para el modal */
+    @keyframes modal-fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Estilo del formulario */
+    .form-control {
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -30,7 +102,14 @@
                 {% endfor %}
             </div>
         </div>
+
         <div class="col-lg-3 mt-4 mt-lg-0">
+            <!-- Botón Agregar Producto -->
+            <button class="btn" id="add-product-btn">
+                <i class="fas fa-plus me-2"></i>Agregar Producto
+            </button>
+            
+            <!-- Widget del carrito -->
             <div class="card-body" id="cart-widget">
                 {% if request.user.is_authenticated %}
                     {% include "carro/widget.html" %}
@@ -43,10 +122,63 @@
         </div>
     </div>
 </div>
+
+<!-- Modal para agregar un producto -->
+<div id="add-product-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body" id="add-product-form-container">
+                <!-- El formulario se cargará con AJAX aquí -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="save-product-btn">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-<script src="{% static 'proyectowebapp/js/tienda.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Abrir el popup de agregar producto
+    $('#add-product-btn').click(function() {
+        $.ajax({
+            url: '{% url "agregar_producto" %}',  // Asegúrate de tener esta URL definida
+            type: 'GET',
+            success: function(data) {
+                $('#add-product-form-container').html(data);
+                $('#add-product-modal').modal('show');
+            }
+        });
+    });
+
+    // Guardar el nuevo producto
+    $('#save-product-btn').click(function() {
+        var form = $('#add-product-form-container form');
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: new FormData(form[0]),
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                if (data.success) {
+                    $('#add-product-modal').modal('hide');
+                    location.reload(); // Recargar la página para ver el nuevo producto
+                } else {
+                    alert('Error: ' + JSON.stringify(data.errors));
+                }
+            }
+        });
+    });
+});
+</script>
 {% endblock %}
