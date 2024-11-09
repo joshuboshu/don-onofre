@@ -1,14 +1,19 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import Producto, CategoriaProd
+from django.contrib.auth.decorators import login_required
+from rules.contrib.views import permission_required
 
 
+@permission_required('tienda.view_producto')
 def tienda(request):
     productos = Producto.objects.all()
     categorias = CategoriaProd.objects.all()  # Obtener todas las categorías
     return render(request, "tienda/tienda.html", {"productos": productos, "categorias": categorias})
 
 
+@login_required
+@permission_required('tienda.add_categoriaprod', raise_exception=True)
 def agregar_categoria(request):
     if request.method == "POST":
         nombre = request.POST.get("nombre")
@@ -19,6 +24,9 @@ def agregar_categoria(request):
 
     return render(request, "tienda/agregar_categoria_form.html")
 
+
+@login_required
+@permission_required('tienda.add_producto', raise_exception=True)
 def agregar_producto(request):
     categorias = CategoriaProd.objects.all()
     if request.method == "POST":
