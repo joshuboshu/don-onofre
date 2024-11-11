@@ -461,6 +461,9 @@
                     success: function () {
                         $('#producto-' + productIdToDelete).remove();
                         $('#delete-product-confirmation-modal').modal('hide');
+                        if($('#delete-product-confirmation-modal').modal('hide')) {
+                            $('#delete-confirmation-modal').modal('hide');
+                        }
                     },
                     error: function () {
                         alert("Hubo un error al eliminar el producto.");
