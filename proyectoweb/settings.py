@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Seguridad
 SECRET_KEY = os.getenv('SECRET_KEY', 'valor_por_defecto')  # Clave secreta para la producción
-DEBUG = False  # Establecer en False para producción
+DEBUG = True  # Establecer en False para producción
 ALLOWED_HOSTS = ['127.0.0.1']  # Hosts permitidos para evitar ataques de DNS spoofing
 BASE_URL = 'http://localhost:8000'  # URL base para generar enlaces
 
