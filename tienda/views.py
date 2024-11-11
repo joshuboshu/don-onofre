@@ -26,6 +26,20 @@ def agregar_categoria(request):
 
 
 @login_required
+@permission_required('tienda.delete_producto', raise_exception=True)
+def eliminar_producto(request, producto_id):
+    if request.method == 'POST':
+        try:
+            producto = Producto.objects.get(id=producto_id)
+            producto.delete()
+            return JsonResponse({'success': True, 'message': 'Producto eliminado correctamente.'})
+        except Producto.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Producto no encontrado.'})
+    return JsonResponse({'success': False, 'message': 'Método no permitido.'})
+
+
+
+@login_required
 @permission_required('tienda.add_producto', raise_exception=True)
 def agregar_producto(request):
     categorias = CategoriaProd.objects.all()

@@ -77,6 +77,23 @@
         background-color: #0056b3;
     }
 
+    /* Estilo del botón "Eliminar Producto" */
+    #delete-product-btn {
+        width: 100%;
+        padding: 15px;
+        font-size: 18px;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        margin-bottom: 10px;
+    }
+
+    #delete-product-btn:hover {
+        background-color: #c82333;
+    }
+
     /* Estilo del formulario en el modal */
     .form-group {
         margin-bottom: 20px;
@@ -170,9 +187,18 @@
                             <h5 class="card-title">{{ producto.nombre }}</h5>
                             <p class="card-text mb-4 text-primary fw-bold">{{ producto.precio }} ₲</p>
                             <div class="mt-auto text-center">
+                                {% if not request.user.is_superuser %}
                                 <button class="btn btn-primary add-to-cart" data-product-id="{{ producto.id }}">
                                     <i class="fas fa-cart-plus me-2"></i>Agregar al carrito
                                 </button>
+                                {% endif %}
+
+                                {% has_perm "tienda.delete_producto" user as can_delete_producto %}
+                                {% if can_delete_producto %}
+                                <button class="btn" id="delete-product-btn" data-producto-id="{{ producto.id }}">
+                                    <i class="fas fa-trash-alt me-2"></i>Eliminar Producto
+                                </button>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -186,27 +212,27 @@
         <div class="col-lg-3 mt-4 mt-lg-0">
             {% has_perm "tienda.add_producto" user as can_add_producto %}
             {% if can_add_producto %}
-                <button class="btn" id="add-product-btn">
-                    <i class="fas fa-plus me-2"></i>Agregar Producto
-                </button>
+            <button class="btn" id="add-product-btn">
+                <i class="fas fa-plus me-2"></i>Agregar Producto
+            </button>
             {% endif %}
             {% has_perm "tienda.add_categoriaprod" user as can_add_categoriaprod %}
             {% if can_add_categoriaprod %}
-                <button class="btn" id="add-category-btn">
-                    <i class="fas fa-tag me-2"></i>Agregar Categoría
-                </button>
+            <button class="btn" id="add-category-btn">
+                <i class="fas fa-tag me-2"></i>Agregar Categoría
+            </button>
             {% endif %}
 
             {% if not request.user.is_superuser %}
-                <div class="card-body" id="cart-widget">
-                    {% if request.user.is_authenticated %}
-                    {% include "carro/widget.html" %}
-                    {% else %}
-                    <div class="alert alert-warning" role="alert">
-                        <i class="fas fa-exclamation-triangle me-2"></i>Iniciar sesión para ver el carrito.
-                    </div>
-                    {% endif %}
+            <div class="card-body" id="cart-widget">
+                {% if request.user.is_authenticated %}
+                {% include "carro/widget.html" %}
+                {% else %}
+                <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Iniciar sesión para ver el carrito.
                 </div>
+                {% endif %}
+            </div>
             {% endif %}
         </div>
     </div>
@@ -314,6 +340,32 @@
         // Cargar formulario de agregar categoría
         $('#add-category-btn').click(function () {
             loadModalContent("{% url 'agregar_categoria' %}", '#add-category-modal', '#add-category-form-container');
+        });
+
+        // Función para eliminar un producto
+        $(document).on('click', '#delete-product-btn', function () {
+            var productoId = $(this).data('producto-id'); // Obtener el ID del producto desde el botón
+
+            if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+                $.ajax({
+                    url: "/eliminar_producto/" + productoId + "/",
+                    method: "POST",
+                    data: {
+                        csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(), // Enviar token CSRF
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                            location.reload();  // Recargar la página para ver los cambios
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert("Hubo un error al eliminar el producto.");
+                    }
+                });
+            }
         });
 
         // Guardar producto mediante AJAX
