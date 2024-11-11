@@ -195,9 +195,13 @@
 
                                 {% has_perm "tienda.delete_producto" user as can_delete_producto %}
                                 {% if can_delete_producto %}
-                                <button class="btn" id="delete-product-btn" data-producto-id="{{ producto.id }}">
-                                    <i class="fas fa-trash-alt me-2"></i>Eliminar Producto
-                                </button>
+                                <form id="delete-product-form-{{ producto.id }}" action="{% url 'eliminar_producto' producto_id=producto.id %}" method="POST" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="button" id="delete-product-btn" class="btn btn-danger delete-product-btn" data-product-id="{{ producto.id }}">
+                                        <i class="fas fa-trash-alt me-2"></i>Eliminar Producto
+                                    </button>
+                                </form>
+                                
                                 {% endif %}
                             </div>
                         </div>
@@ -342,31 +346,35 @@
             loadModalContent("{% url 'agregar_categoria' %}", '#add-category-modal', '#add-category-form-container');
         });
 
-        // Función para eliminar un producto
-        $(document).on('click', '#delete-product-btn', function () {
-            var productoId = $(this).data('producto-id'); // Obtener el ID del producto desde el botón
+        // Eliminar producto mediante AJAX
+        $(document).ready(function () {
+            // Manejar eliminación de producto con AJAX
+            $(document).on('click', '.delete-product-btn', function () {
+                var productId = $(this).data('product-id');
+                var form = $('#delete-product-form-' + productId);
 
-            if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
-                $.ajax({
-                    url: "/eliminar_producto/" + productoId + "/",
-                    method: "POST",
-                    data: {
-                        csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(), // Enviar token CSRF
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            alert(response.message);
-                            location.reload();  // Recargar la página para ver los cambios
-                        } else {
-                            alert(response.message);
+                // Confirmación antes de proceder con la eliminación
+                if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+                    $.ajax({
+                        url: form.attr('action'),  // Usar la URL del formulario
+                        method: 'POST',
+                        data: form.serialize(),   // Serializar los datos del formulario
+                        success: function (response) {
+                            // Eliminar el producto de la vista
+                            $('#producto-' + productId).remove();
+
+                            // Mostrar un mensaje de éxito
+                            alert("Producto eliminado exitosamente.");
+                        },
+                        error: function () {
+                            alert("Hubo un error al eliminar el producto.");
                         }
-                    },
-                    error: function() {
-                        alert("Hubo un error al eliminar el producto.");
-                    }
-                });
-            }
+                    });
+                }
+            });
         });
+
+        
 
         // Guardar producto mediante AJAX
         $(document).on('click', '#save-product-btn', function () {
