@@ -349,63 +349,61 @@
 
         // Guardar producto después de agregarlo
         $(document).on('click', '#save-product-btn', function () {
-            var formData = new FormData($('#add-product-form')[0]);
-            $.ajax({
-                url: "{% url 'agregar_producto' %}",
-                method: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    $('#add-product-modal').modal('hide');
-                    $('#product-added-confirmation-modal').modal('show');
+    var formData = new FormData($('#add-product-form')[0]);
+    $.ajax({
+        url: "{% url 'agregar_producto' %}",
+        method: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            $('#add-product-modal').modal('hide');
+            $('#product-added-confirmation-modal').modal('show');
 
-                    // Agregar el nuevo producto al DOM sin recargar
-                    var newProduct = `
+            // Agregar el nuevo producto al DOM sin recargar
+            var newProduct = `
                 <div class="col">
                     <div class="card h-100 shadow-sm hover-effect">
-                        <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                        <img src="${response.imagen_url}" class="card-img-top" alt="${response.nombre}">
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">{{ producto.nombre }}</h5>
-                            <p class="card-text mb-4 text-primary fw-bold">{{ producto.precio }} ₲</p>
+                            <h5 class="card-title">${response.nombre}</h5>
+                            <p class="card-text mb-4 text-primary fw-bold">${response.precio} ₲</p>
                             <div class="mt-auto text-center">
                                 
-                                {% if not request.user.is_superuser %}
-                                <button class="btn btn-primary add-to-cart" data-product-id="{{ producto.id }}">
+                                ${!response.is_superuser ? `
+                                <button class="btn btn-primary add-to-cart" data-product-id="${response.id}">
                                     <i class="fas fa-cart-plus me-2"></i>Agregar al carrito
-                                </button>
-                                {% endif %}
+                                </button>` : ''}
 
-                                {% has_perm "tienda.delete_producto" user as can_delete_producto %}
-                                {% if can_delete_producto %}
-                                <form id="delete-product-form-{{ producto.id }}"
-                                    action="{% url 'eliminar_producto' producto_id=producto.id %}" method="POST"
-                                    style="display: inline;">
+                                ${response.can_delete ? `
+                                <form id="delete-product-form-${response.id}"
+                                      action="{% url 'eliminar_producto' producto_id=0 %}".replace('0', response.id) method="POST"
+                                      style="display: inline;">
                                     {% csrf_token %}
-                                    <button type="button" class="btn btn-danger delete-product-btn" data-product-id="{{ producto.id }}">
+                                    <button type="button" class="btn btn-danger delete-product-btn" data-product-id="${response.id}">
                                         <i class="fas fa-trash-alt me-2"></i>Eliminar Producto
                                     </button>
-                                </form>
-                                {% endif %}
+                                </form>` : ''}
                             </div>
                         </div>
                     </div>
                 </div>
-
             `;
-                    // Añadir el nuevo producto al contenedor
-                    $('.row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-4').append(newProduct);
 
-                    // Cerrar el modal de confirmación después de 3 segundos
-                    setTimeout(function () {
-                        $('#product-added-confirmation-modal').modal('hide');
-                    }, 3000);
-                },
-                error: function () {
-                    alert("Hubo un error al guardar el producto.");
-                }
-            });
-        });
+            // Añadir el nuevo producto al contenedor
+            $('.row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-4').append(newProduct);
+
+            // Cerrar el modal de confirmación después de 3 segundos
+            setTimeout(function () {
+                $('#product-added-confirmation-modal').modal('hide');
+            }, 3000);
+        },
+        error: function () {
+            alert("Hubo un error al guardar el producto.");
+        }
+    });
+});
+
 
         // Eliminar producto mediante AJAX
         $(document).on('click', '.delete-product-btn', function () {
