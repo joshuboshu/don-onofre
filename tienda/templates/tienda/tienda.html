@@ -195,13 +195,16 @@
 
                                 {% has_perm "tienda.delete_producto" user as can_delete_producto %}
                                 {% if can_delete_producto %}
-                                <form id="delete-product-form-{{ producto.id }}" action="{% url 'eliminar_producto' producto_id=producto.id %}" method="POST" style="display: inline;">
+                                <form id="delete-product-form-{{ producto.id }}"
+                                    action="{% url 'eliminar_producto' producto_id=producto.id %}" method="POST"
+                                    style="display: inline;">
                                     {% csrf_token %}
-                                    <button type="button" id="delete-product-btn" class="btn btn-danger delete-product-btn" data-product-id="{{ producto.id }}">
+                                    <button type="button" id="delete-product-btn"
+                                        class="btn btn-danger delete-product-btn" data-product-id="{{ producto.id }}">
                                         <i class="fas fa-trash-alt me-2"></i>Eliminar Producto
                                     </button>
                                 </form>
-                                
+
                                 {% endif %}
                             </div>
                         </div>
@@ -336,51 +339,17 @@
             });
         }
 
-        // Cargar formulario de agregar producto
         $('#add-product-btn').click(function () {
             loadModalContent("{% url 'agregar_producto' %}", '#add-product-modal', '#add-product-form-container');
         });
 
-        // Cargar formulario de agregar categoría
         $('#add-category-btn').click(function () {
             loadModalContent("{% url 'agregar_categoria' %}", '#add-category-modal', '#add-category-form-container');
         });
 
-        // Eliminar producto mediante AJAX
-        $(document).ready(function () {
-            // Manejar eliminación de producto con AJAX
-            $(document).on('click', '.delete-product-btn', function () {
-                var productId = $(this).data('product-id');
-                var form = $('#delete-product-form-' + productId);
-
-                // Confirmación antes de proceder con la eliminación
-                if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
-                    $.ajax({
-                        url: form.attr('action'),  // Usar la URL del formulario
-                        method: 'POST',
-                        data: form.serialize(),   // Serializar los datos del formulario
-                        success: function (response) {
-                            // Eliminar el producto de la vista
-                            $('#producto-' + productId).remove();
-
-                            // Mostrar un mensaje de éxito
-                            alert("Producto eliminado exitosamente.");
-                        },
-                        error: function () {
-                            alert("Hubo un error al eliminar el producto.");
-                        }
-                    });
-                }
-            });
-        });
-
-        
-
-        // Guardar producto mediante AJAX
+        // Guardar producto después de agregarlo
         $(document).on('click', '#save-product-btn', function () {
-            var form = $('#add-product-form');
-            var formData = new FormData(form[0]);
-
+            var formData = new FormData($('#add-product-form')[0]);
             $.ajax({
                 url: "{% url 'agregar_producto' %}",
                 method: "POST",
@@ -389,18 +358,74 @@
                 contentType: false,
                 success: function (response) {
                     $('#add-product-modal').modal('hide');
-                    $('#product-added-confirmation-modal').modal('show');  // Mostrar modal de confirmación
+                    $('#product-added-confirmation-modal').modal('show');
 
-                    // Ocultar el modal de confirmación después de 3 segundos
+                    // Agregar el nuevo producto al DOM sin recargar
+                    var newProduct = `
+                <div class="col">
+                    <div class="card h-100 shadow-sm hover-effect">
+                        <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ producto.nombre }}</h5>
+                            <p class="card-text mb-4 text-primary fw-bold">{{ producto.precio }} ₲</p>
+                            <div class="mt-auto text-center">
+                                
+                                {% if not request.user.is_superuser %}
+                                <button class="btn btn-primary add-to-cart" data-product-id="{{ producto.id }}">
+                                    <i class="fas fa-cart-plus me-2"></i>Agregar al carrito
+                                </button>
+                                {% endif %}
+
+                                {% has_perm "tienda.delete_producto" user as can_delete_producto %}
+                                {% if can_delete_producto %}
+                                <form id="delete-product-form-{{ producto.id }}"
+                                    action="{% url 'eliminar_producto' producto_id=producto.id %}" method="POST"
+                                    style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="button" class="btn btn-danger delete-product-btn" data-product-id="{{ producto.id }}">
+                                        <i class="fas fa-trash-alt me-2"></i>Eliminar Producto
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            `;
+                    // Añadir el nuevo producto al contenedor
+                    $('.row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-4').append(newProduct);
+
+                    // Cerrar el modal de confirmación después de 3 segundos
                     setTimeout(function () {
                         $('#product-added-confirmation-modal').modal('hide');
-                        location.reload();  // Recargar la página para ver el nuevo producto
                     }, 3000);
                 },
                 error: function () {
                     alert("Hubo un error al guardar el producto.");
                 }
             });
+        });
+
+        // Eliminar producto mediante AJAX
+        $(document).on('click', '.delete-product-btn', function () {
+            var productId = $(this).data('product-id');
+            var form = $('#delete-product-form-' + productId);
+
+            if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+                $.ajax({
+                    url: form.attr('action'),
+                    method: 'POST',
+                    data: form.serialize(),
+                    success: function () {
+                        $('#producto-' + productId).remove();
+                        alert("Producto eliminado exitosamente.");
+                    },
+                    error: function () {
+                        alert("Hubo un error al eliminar el producto.");
+                    }
+                });
+            }
         });
 
         // Guardar categoría mediante AJAX
@@ -412,14 +437,13 @@
                 url: "{% url 'agregar_categoria' %}",
                 method: "POST",
                 data: formData,
-                success: function (response) {
+                success: function () {
                     $('#add-category-modal').modal('hide');
-                    $('#category-added-confirmation-modal').modal('show');  // Mostrar modal de confirmación
+                    $('#category-added-confirmation-modal').modal('show');
 
-                    // Ocultar el modal de confirmación después de 3 segundos
                     setTimeout(function () {
                         $('#category-added-confirmation-modal').modal('hide');
-                        location.reload();  // Recargar la página para ver la nueva categoría
+                        location.reload();
                     }, 3000);
                 },
                 error: function () {
@@ -428,8 +452,6 @@
             });
         });
     });
-
-
 </script>
 
 {% endblock %}
