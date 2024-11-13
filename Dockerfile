@@ -1,18 +1,28 @@
 # Usa la imagen base de Python
-FROM python:3.12-alpine
+FROM python:3.10-alpine
 
-# Configuración de entorno
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
+# Instala dependencias necesarias
+RUN apk update && apk add --no-cache \
+    libpq-dev \
+    gcc \
+    musl-dev \
+    postgresql-dev \
+    python3-dev \
+    libffi-dev \
+    && rm -rf /var/cache/apk/*
 
-# Establece el directorio de trabajo en /app
-WORKDIR /app
+# Establece el directorio de trabajo en el contenedor
+WORKDIR /code
 
-# Copia todo el contenido del proyecto
+# Copia el archivo de requerimientos e instala las dependencias
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copia todo el contenido del proyecto a /code
 COPY . .
 
-# Da permisos de ejecución al script .sh
-RUN chmod +x tu_script.sh
+# Expone el puerto 8002 para la aplicación Django
+EXPOSE 8002
 
-# Ejecuta el script .sh al iniciar el contenedor
-CMD ["sh", "/app/command.sh"]
+# Ejecuta el script de comandos al iniciar el contenedor
+ENTRYPOINT ["./command.sh"]
