@@ -3,6 +3,12 @@ from django.http import JsonResponse
 from .models import Producto, CategoriaProd
 from django.contrib.auth.decorators import login_required
 from rules.contrib.views import permission_required
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import ProductoSerializer, CategoriaProdSerializer
+from rest_framework.permissions import IsAuthenticated
+
 
 
 def tienda(request):
@@ -63,3 +69,34 @@ def agregar_producto(request):
         return JsonResponse({"success": False, "message": "Todos los campos son obligatorios."})
 
     return render(request, "tienda/agregar_producto_form.html", {"categorias": categorias})
+
+
+class CategoriaProdListCreate(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        categorias = CategoriaProd.objects.all()
+        serializer = CategoriaProdSerializer(categorias, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = CategoriaProdSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ProductoListCreate(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        productos = Producto.objects.all()
+        serializer = ProductoSerializer(productos, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = ProductoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

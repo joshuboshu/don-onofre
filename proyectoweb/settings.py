@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'pedidos',
     'rules', 
+    'rest_framework',
+    'corsheaders',
 ]
 
 # Middleware
@@ -47,6 +49,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Para servir archivos estáticos en producción
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -78,6 +81,19 @@ TEMPLATES = [
 # Aplicación WSGI para desplegar el proyecto
 WSGI_APPLICATION = 'proyectoweb.wsgi.app'
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+# Permitir solicitudes de origen cruzado desde el dominio de Vue
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",  # URL donde Vue estará en desarrollo
+]
 
 # Configuración de la base de datos
 DATABASES = {

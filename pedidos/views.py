@@ -5,9 +5,14 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from .models import Pedido, LineaPedido
+from .serializers import PedidoSerializer
 from carro.carro import Carro
-from tienda.models import Producto
+
 from .adamspay_utils import create_debt, get_debt_status, is_debt_paid, get_payment_time
 
 
@@ -92,3 +97,32 @@ def enviar_mail(**kwargs):
     to = kwargs.get("emailusuario")
 
     send_mail(asunto, mensaje_texto, from_email, [to], html_message=mensaje)
+
+class PedidoListCreate(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        pedidos = Pedido.objects.filter(user=request.user)
+        serializer = PedidoSerializer(pedidos, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        carro = Carro(request)
+        if not carro.carro:
+            return Response({"error": "El carrito está vacío."}, status=status.HTTP_400_BAD_REQUEST)
+
+        pedido = Pedido.objects.create(user=request.user)
+        lineas_pedido = [
+            LineaPedido(
+                user=request.user,
+                producto_id=key,
+                pedido=pedido,
+                cantidad=value["cantidad"]
+            )
+            for key, value in carro.carro.items()
+        ]
+        LineaPedido.objects.bulk_create(lineas_pedido)
+
+        serializer = PedidoSerializer(pedido)
+        carro.limpiar_carro()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
