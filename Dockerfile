@@ -1,9 +1,15 @@
 # Usa la imagen base de Python
-FROM python:3.12-alpine
+FROM python:3.10-alpine
 
-# Configuración de entorno
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
+# Instala dependencias necesarias
+RUN apk update && apk add --no-cache \
+    libpq-dev \
+    gcc \
+    musl-dev \
+    postgresql-dev \
+    python3-dev \
+    libffi-dev \
+    && rm -rf /var/cache/apk/*
 
 # Establece el directorio de trabajo en /app
 WORKDIR /app

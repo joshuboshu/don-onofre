@@ -1,22 +1,6 @@
 #!/bin/bash
 
-# Actualiza e instala dependencias necesarias en la imagen base de Docker
-apk update && apk add --no-cache \
-    libpq-dev \
-    gcc \
-    musl-dev \
-    postgresql-dev \
-    python3-dev \
-    libffi-dev \
-    && rm -rf /var/cache/apk/*
-
-# Copia el archivo de requerimientos
-COPY ./requirements.txt ./
-
-# Instala las dependencias de Python
-pip install --no-cache-dir --upgrade -r requirements.txt
-
-# Detiene y elimina contenedores, redes y volúmenes creados previamente por docker-compose
+# Detiene y elimina contenedores, redes y volúmenes anteriores
 docker compose down --volumes --remove-orphans
 
 # Construye los contenedores
