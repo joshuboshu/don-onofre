@@ -13,7 +13,7 @@ body {
     color: #343a40;
 }
 
-h1, h5 {
+h5 {
     font-weight: bold;
     color: #343a40;
 }
@@ -39,7 +39,7 @@ h1, h5 {
     object-fit: cover;
 }
 
-.card-title {
+.card-title.prod {
     color: #007bff;
 }
 
@@ -160,11 +160,11 @@ h1, h5 {
                     <div class="card h-100 shadow-sm">
                         <img src=" /media/{{ producto.imagen }}" class="card-img-top" alt="{{ producto.nombre }}">
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">{{ producto.nombre }}</h5>
+                            <h5 class="card-title prod">{{ producto.nombre }}</h5>
                             <p class="card-text mb-4">{{ producto.precio }} ₲</p>
                             <div class="mt-auto text-center">
                                 {% if not request.user.is_superuser %}
-                                <button class="btn btn-success add-to-cart" data-product-id="{{ producto.id }}">
+                                <button type="button" class="btn btn-success add-to-cart" data-product-id="{{ producto.id }}">
                                     <i class="fas fa-cart-plus me-2"></i>Agregar al carrito
                                 </button>
                                 {% endif %}
@@ -206,16 +206,14 @@ h1, h5 {
             {% endif %}
 
             {% if not request.user.is_superuser %}
-            <div class="card mt-3" id="cart-widget">
-                <div class="card-body">
-                    {% if request.user.is_authenticated %}
-                    {% include "carro/widget.html" %}
-                    {% else %}
-                    <div class="alert alert-warning" role="alert">
-                        <i class="fas fa-exclamation-triangle me-2"></i>Iniciar sesión para ver el carrito.
-                    </div>
-                    {% endif %}
-                </div>
+            <div class="card-body" id="cart-widget">
+                {% if request.user.is_authenticated %}
+                {% include "carro/widget.html" %}
+                {% else %}
+                <button type="button" class="btn btn-success add-to-cart" data-product-id="{{ producto.id }}">
+                    <i class="fas fa-cart-plus me-2"></i>Agregar al carrito
+                </button>                
+                {% endif %}
             </div>
             {% endif %}
         </div>
@@ -354,6 +352,33 @@ h1, h5 {
             });
         }
 
+        // Función para agregar productos al carrito
+        $('.add-to-cart').click(function () {
+            var productId = $(this).data('product-id');
+            
+            $.ajax({
+                url: "{% url 'carro:update_cart' %}",
+                method: "POST",
+                data: {
+                    'product_id': productId,
+                    'action': 'add',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // Actualiza el contenido del carrito con el HTML recibido
+                        $('#cart-widget').html(response.cart_html);
+                    } else {
+                        alert("Error: " + (response.error || "No se pudo agregar el producto."));
+                    }
+                },
+                error: function () {
+                    alert("Hubo un error al agregar el producto al carrito.");
+                }
+            });
+        });
+        
+        // Funciones para agregar productos y categorías
         $('#add-product-btn').click(function () {
             loadModalContent("{% url 'agregar_producto' %}", '#add-product-modal', '#add-product-form-container');
         });
@@ -362,7 +387,6 @@ h1, h5 {
             loadModalContent("{% url 'agregar_categoria' %}", '#add-category-modal', '#add-category-form-container');
         });
 
-        // Guardar producto después de agregarlo
         $(document).on('click', '#save-product-btn', function () {
             var formData = new FormData($('#add-product-form')[0]);
             $.ajax({
@@ -374,8 +398,6 @@ h1, h5 {
                 success: function (response) {
                     $('#add-product-modal').modal('hide');
                     $('#product-added-confirmation-modal').modal('show');
-
-                    // Recargar la página inmediatamente
                     location.reload();
                 },
                 error: function () {
