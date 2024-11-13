@@ -14,11 +14,11 @@ RUN apk update && apk add --no-cache \
 # Establece el directorio de trabajo en /app
 WORKDIR /app
 
-# Copia todo el contenido del proyecto
+# Copia todo el contenido del proyecto a /app
 COPY . .
 
-# Da permisos de ejecución al script .sh
-RUN chmod +x tu_script.sh
+# Instala dependencias de Python
+RUN pip install -r requirements.txt
 
-# Ejecuta el script .sh al iniciar el contenedor
-CMD ["sh", "/app/command.sh"]
+# Define el comando de inicio del contenedor
+CMD ["sh", "./command.sh"]

@@ -9,13 +9,18 @@ load_dotenv()
 # Definición de rutas
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Seguridad
-SECRET_KEY = os.getenv('SECRET_KEY', 'valor_por_defecto')  # Clave secreta para la producción
-DEBUG = True  # Establecer en False para producción
-ALLOWED_HOSTS = ['127.0.0.1']  # Hosts permitidos para evitar ataques de DNS spoofing
-BASE_URL = 'http://localhost:8000'  # URL base para generar enlaces
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.getenv('SECRET_KEY', 'valor_por_defecto')
 
-# Aplicaciones instaladas
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
+ALLOWED_HOSTS = ['*']
+
+BASE_URL = 'http://localhost:8003'
+
+# Application definition
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -82,7 +87,7 @@ DATABASES = {
         'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
         'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
-        'PORT': os.getenv('POSTGRES_PORT', '5432'),
+        'PORT': os.getenv('POSTGRES_PORT', '5435'),
     }
 }
 
@@ -94,34 +99,46 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internacionalización y zona horaria
-LANGUAGE_CODE = 'es-es'  # Configuración de idioma
-TIME_ZONE = 'UTC'  # Configuración de zona horaria
-USE_I18N = True  # Habilitar traducciones
-USE_TZ = True  # Habilitar soporte para zonas horarias
+# Internationalization
+# https://docs.djangoproject.com/en/5.1/topics/i18n/
+
+LANGUAGE_CODE = 'es-es'
+
+TIME_ZONE = 'UTC'
+
+USE_I18N = True
+
+USE_TZ = True
+
 SITE_ID = 1
 
-# Archivos estáticos (CSS, JavaScript, imágenes)
-STATIC_URL = '/static/'  # URL de los archivos estáticos
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Directorios adicionales de archivos estáticos
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Directorio de salida de los archivos estáticos
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # Uso de WhiteNoise para producción
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.1/howto/static-files/
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_IGNORE_PATTERNS = [
     "proyectowebapp/vendor/font-awesome/less/*.less",  # Ignorar archivos .less de FontAwesome
 ]
 
-# Archivos multimedia (imagenes, videos, etc.)
-MEDIA_URL = '/media/'  # URL para acceder a los archivos de medios
-MEDIA_ROOT = BASE_DIR / 'media'  # Directorio donde se almacenan los archivos de medios
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+# Default primary key field type
+# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
-# Configuración de correo
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Configuracion de contacto
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "tucorreo@gmail.com"  # Cambia este valor por tu correo real
-EMAIL_HOST_PASSWORD = "tupassword"  # Cambia este valor por tu contraseña real
+EMAIL_HOST_USER = "tucorreo@gmail.com"
+EMAIL_HOST_PASSWORD = "tupassword"
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Formateo de mensajes de error en el frontend
 MESSAGE_TAGS = {
@@ -132,14 +149,7 @@ MESSAGE_TAGS = {
     mensajes_de_error.ERROR: 'danger',
 }
 
-# Configuración de formularios
-CRISPY_TEMPLATE_PACK = 'bootstrap4'  # Paquete de plantillas para formularios con Bootstrap
-
-# Configuración de autenticación
 AUTHENTICATION_BACKENDS = (
-    'rules.permissions.ObjectPermissionBackend',  # Usar django-rules para permisos de objetos
-    'django.contrib.auth.backends.ModelBackend',  # Backend predeterminado para autenticación
+    'rules.permissions.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
-
-# Tipo de campo de clave primaria por defecto
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
