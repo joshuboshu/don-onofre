@@ -16,5 +16,9 @@ sleep 10
 docker compose exec web python manage.py makemigrations
 docker compose exec web python manage.py migrate
 
-# Ejecuta el servidor de desarrollo
-docker compose exec web python manage.py runserver 0.0.0.0:8002
+# Abre automáticamente en el navegador (asegúrate de que coincida el puerto con docker-compose)
+if command -v xdg-open &> /dev/null; then
+    xdg-open http://localhost:8002
+elif command -v open &> /dev/null; then
+    open http://localhost:8002
+fi
