@@ -9,7 +9,6 @@ load_dotenv()
 # Definición de rutas
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-<<<<<<< HEAD
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', 'valor_por_defecto')
 
@@ -22,15 +21,6 @@ BASE_URL = 'http://localhost:8000'
 
 # Application definition
 
-=======
-# Seguridad
-SECRET_KEY = os.getenv('SECRET_KEY', 'valor_por_defecto')  # Clave secreta para la producción
-DEBUG = True  # Establecer en False para producción
-ALLOWED_HOSTS = ['127.0.0.1']  # Hosts permitidos para evitar ataques de DNS spoofing
-BASE_URL = 'http://localhost:8000'  # URL base para generar enlaces
-
-# Aplicaciones instaladas
->>>>>>> origin/docker
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
