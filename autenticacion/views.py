@@ -4,16 +4,6 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 
-from django.shortcuts import render, redirect
-from django.views import View
-from django.contrib import messages
-from django.contrib.auth.models import User
-
-from django.shortcuts import render, redirect
-from django.views import View
-from django.contrib import messages
-from django.contrib.auth.models import User
-
 class VRegistro(View):
     def get(self, request):
         return render(request, "registro/registro.html")
