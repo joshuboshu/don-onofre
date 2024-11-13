@@ -1,9 +1,7 @@
-FROM python:3.12-alpine
+# Usa la imagen base de Python
+FROM python:3.10-alpine
 
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
-
-# Instala las dependencias necesarias
+# Instala dependencias necesarias
 RUN apk update && apk add --no-cache \
     libpq-dev \
     gcc \
@@ -16,8 +14,11 @@ RUN apk update && apk add --no-cache \
 # Establece el directorio de trabajo en /app
 WORKDIR /app
 
-# Copia el archivo de requerimientos
-COPY ./requirements.txt ./
+# Copia todo el contenido del proyecto
+COPY . .
 
-# Instala las dependencias
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+# Da permisos de ejecución al script .sh
+RUN chmod +x tu_script.sh
+
+# Ejecuta el script .sh al iniciar el contenedor
+CMD ["sh", "/app/command.sh"]

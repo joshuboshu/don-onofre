@@ -1,12 +1,10 @@
-version: '3.9'
-
 services:
   db:
     image: postgres:14
     restart: always
     container_name: postgresql
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data  # Usamos un volumen anónimo
     environment:
       POSTGRES_DB: prueba_db
       POSTGRES_USER: postgres
@@ -18,9 +16,9 @@ services:
     container_name: django
     command: python manage.py runserver 0.0.0.0:8002
     volumes:
-      - .:/app
+      - .:/code
     ports:
-      - "8002:8000"
+      - "8000:8000"
     environment:
       - POSTGRES_NAME=prueba_db
       - POSTGRES_USER=postgres
@@ -28,4 +26,4 @@ services:
     depends_on:
       - db
 volumes:
-  postgres_data:
+  db-data:  # Definir un volumen anónimo

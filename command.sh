@@ -1,20 +1,25 @@
 #!/bin/bash
 
-# Baja los contenedores en caso de que ya estén corriendo
-docker compose down
+# Detiene y elimina contenedores, redes y volúmenes anteriores
+docker compose down --volumes --remove-orphans
 
-# Construye las imágenes de los servicios
+# Construye los contenedores
 docker compose build
 
-# Levanta los servicios en segundo plano
-docker compose up -d
+# Levanta los contenedores
+docker compose up --remove-orphans -d
 
-# Espera unos segundos para asegurarse de que el contenedor de la base de datos esté listo
-sleep 10
+# Instala dependencias de Python en el contenedor 'web'
+docker compose exec web pip install -r requirements.txt
 
-# Ejecuta makemigrations y migrate
-docker compose exec web python manage.py makemigrations
+# Aplica las migraciones de Django
 docker compose exec web python manage.py migrate
 
-# Ejecuta el servidor de desarrollo
-docker compose exec web python manage.py runserver 0.0.0.0:8002
+# Ejecuta collectstatic de Django
+docker compose exec web python manage.py collectstatic --noinput
+
+# Inicia el servidor de Django
+docker compose exec web python manage.py runserver 0.0.0.0:8000
+
+# Muestra los logs de los contenedores
+docker compose logs -f
