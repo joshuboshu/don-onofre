@@ -29,11 +29,11 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 shadow">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="{% url 'Home' %}">
-                    <i class="fas fa-box-open me-2" aria-hidden="true"></i>
-                    <span class="fw-bold">DON ONOFRE</span>
+                    <i class="fas fa-box-open me-2 fs-4" aria-hidden="true"></i>
+                    <span class="fw-bold fs-4">DON ONOFRE</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
@@ -42,40 +42,51 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
+                        <!-- Inicio -->
                         <li class="nav-item {% if request.path == '/' %}active{% endif %}">
-                            <a class="nav-link" href="{% url 'Home' %}">Inicio</a>
+                            <a class="nav-link text-uppercase fw-semibold px-3 py-2 rounded {% if request.path == '/' %}active-link{% endif %}"
+                               href="{% url 'Home' %}">Inicio</a>
                         </li>
+                        
+                        <!-- Servicios -->
                         <li class="nav-item {% if request.path == '/servicios/' %}active{% endif %}">
-                            <a class="nav-link" href="{% url 'Servicios' %}">Servicios</a>
+                            <a class="nav-link text-uppercase fw-semibold px-3 py-2 rounded {% if request.path == '/servicios/' %}active-link{% endif %}"
+                               href="{% url 'Servicios' %}">Servicios</a>
                         </li>
+                        
+                        <!-- Tienda -->
                         <li class="nav-item {% if request.path == '/tienda/' %}active{% endif %}">
-                            <a class="nav-link" href="{% url 'Tienda' %}">Tienda</a>
+                            <a class="nav-link text-uppercase fw-semibold px-3 py-2 rounded {% if request.path == '/tienda/' %}active-link{% endif %}"
+                               href="{% url 'Tienda' %}">Tienda</a>
                         </li>
+                        
+                        <!-- Contacto -->
                         <li class="nav-item {% if request.path == '/contacto/' %}active{% endif %}">
-                            <a class="nav-link" href="{% url 'Contacto' %}">Contacto</a>
+                            <a class="nav-link text-uppercase fw-semibold px-3 py-2 rounded {% if request.path == '/contacto/' %}active-link{% endif %}"
+                               href="{% url 'Contacto' %}">Contacto</a>
                         </li>
+                        
+                        <!-- Blog -->
                         <li class="nav-item {% if request.path|slice:':6' == '/blog/' %}active{% endif %}">
-                            <a class="nav-link" href="{% url 'Blog' %}">Blog</a>
+                            <a class="nav-link text-uppercase fw-semibold px-3 py-2 rounded {% if request.path|slice:':6' == '/blog/' %}active-link{% endif %}"
+                               href="{% url 'Blog' %}">Blog</a>
                         </li>
+                    
                         <!-- Sección de Usuario -->
                         {% if request.user.is_authenticated %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user"></i> {{ request.user.username }}
+                        <li class="nav-item {% if request.path == '/users/' %}active{% endif %}">
+                            <a class="nav-link text-uppercase fw-semibold px-3 py-2 rounded {% if request.path == '/users/' %}active-link{% endif %}" 
+                                href="{% url 'profile' %}"><i class="fas fa-user"></i> {{ request.user.username }}
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="{% url 'profile' %}">Perfil</a></li>
-                                <li><a class="dropdown-item" href="{% url 'cerrar_sesion' %}">Cerrar sesión</a></li>
-                            </ul>
                         </li>
                         {% endif %}
                     </ul>
                 </div>
             </div>
         </nav>
-
-        <div class="hero-section py-5">
+        
+        <!-- Hero Section con fondo azul transparente -->
+        <div class="hero-section py-5" style="background-color: rgba(0, 123, 255, 0.7); color: #ffffff;">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-8">
@@ -85,8 +96,8 @@
                     </div>
                     <div class="col-md-4 text-md-end animate__animated animate__fadeInRight">
                         {% if user.is_authenticated %}
-                        <span class="me-3">Bienvenido, {{ user.username }}</span>
-                        <!-- <a href="{% url 'cerrar_sesion' %}" class="btn btn-outline-light">Cerrar sesión</a> -->
+                        <span class="me-3 fs-5">Bienvenido, <strong>{{ user.username }}</strong></span>
+                        <a href="{% url 'cerrar_sesion' %}" class="btn btn-outline-light">Cerrar sesión</a>
                         {% else %}
                         <a href="{% url 'logear' %}" class="btn btn-outline-light me-2">Login</a>
                         <a href="{% url 'Autenticacion' %}" class="btn btn-light">Registrarse</a>
@@ -95,6 +106,7 @@
                 </div>
             </div>
         </div>
+              
     </header>
 
     <main class="py-5">

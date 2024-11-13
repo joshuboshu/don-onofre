@@ -2,19 +2,64 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2>Perfil de Usuario</h2>
-    <form method="POST">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="username" class="form-label">Nombre de Usuario</label>
-            <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+<div class="container mt-5 p-5 border rounded shadow-lg bg-white" style="max-width: 800px;">
+    <h2 class="text-center mb-4 text-dark">Perfil de Usuario</h2>
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <form method="POST" class="p-4 border rounded shadow-sm bg-light">
+                {% csrf_token %}
+                
+                <!-- Información de usuario -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="username" class="form-label text-dark">Nombre de Usuario</label>
+                        <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="email" class="form-label text-dark">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                    </div>
+                </div>
+                
+                <!-- Nombre y Apellido -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="first_name" class="form-label text-dark">Nombre</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="last_name" class="form-label text-dark">Apellido</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
+                    </div>
+                </div>
+                
+                <!-- Teléfono y Dirección -->
+                <div class="mb-3">
+                    <label for="phone" class="form-label text-dark">Teléfono</label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="{{ user.profile.phone }}" placeholder="e.g. +123456789">
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label text-dark">Dirección</label>
+                    <textarea class="form-control" id="address" name="address" rows="2">{{ user.profile.address }}</textarea>
+                </div>
+                
+                <!-- Botón de actualización -->
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Actualizar Perfil</button>
+                </div>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Correo Electrónico</label>
-            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- Sección de Seguridad -->
+    <h2 class="text-center mb-4 text-dark">Seguridad</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <a href="{% url 'password_change' %}" class="btn btn-outline-danger w-100">Cambiar Contraseña</a>
         </div>
-        <button type="submit" class="btn btn-primary">Actualizar Perfil</button>
-    </form>
+    </div>
 </div>
+
 {% endblock %}
