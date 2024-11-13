@@ -76,40 +76,42 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 <script>
-    function updateCart(productId, action) {
-        $.ajax({
-            url: "{% url 'carro:update_cart' %}",  // Usar URL de Django
-            type: 'POST',
-            data: {
-                'product_id': productId,
-                'action': action,
-                'csrfmiddlewaretoken': document.querySelector('[name=csrfmiddlewaretoken]').value
-            },
-            success: function(response) {
-                if(response.success) {
-                    // Actualizar la cantidad y el precio del producto
-                    $('#quantity-' + productId).text(response.quantity);
-                    $('#price-' + productId).text(response.price + ' ₲');
-                    // Actualizar el total del carrito
-                    $('#total-price').text(response.total + ' ₲');
-                    
-                    // Si la cantidad es 0, elimina la fila del producto
-                    if(response.quantity === 0) {
-                        $('#product-row-' + productId).fadeOut(300, function() { $(this).remove(); });
-                    }
-                    
-                    // Si el carrito está vacío, mostrar el mensaje "Sin productos"
-                    if(response.cart_empty) {
-                        $('#cart-body').html('<tr><td colspan="3"><div class="alert alert-danger text-center mb-0">Sin productos</div></td></tr>');
-                        $('.card-footer').html("<a href='{% url 'Tienda' %}' class='btn btn-primary'><i class='fas fa-store me-2'></i>Ir a la Tienda</a>");
-                    }
+    function getCsrfToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+}
+
+function updateCart(productId, action) {
+    $.ajax({
+        url: "{% url 'carro:update_cart' %}",
+        type: 'POST',
+        data: {
+            'product_id': productId,
+            'action': action,
+            'csrfmiddlewaretoken': "{{ csrf_token }}"  // Token CSRF insertado directamente
+        },
+        success: function(response) {
+            if(response.success) {
+                $('#quantity-' + productId).text(response.quantity);
+                $('#price-' + productId).text(response.price + ' ₲');
+                $('#total-price').text(response.total + ' ₲');
+                
+                if(response.quantity === 0) {
+                    $('#product-row-' + productId).fadeOut(300, function() { $(this).remove(); });
                 }
-            },
-            error: function(xhr, errmsg, err) {
-                console.log(xhr.status + ": " + xhr.responseText);
-                alert('Error al actualizar el carrito');
+                
+                if(response.cart_empty) {
+                    $('#cart-body').html('<tr><td colspan="3"><div class="alert alert-danger text-center mb-0">Sin productos</div></td></tr>');
+                    $('.card-footer').html("<a href='{% url 'Tienda' %}' class='btn btn-primary'><i class='fas fa-store me-2'></i>Ir a la Tienda</a>");
+                }
             }
-        });
-    }
+        },
+        error: function(xhr, errmsg, err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+            alert('Error al actualizar el carrito');
+        }
+    });
+}
+
+
 </script>
 {% endblock %}

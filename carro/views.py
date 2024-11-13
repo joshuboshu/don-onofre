@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from .carro import Carro
 from tienda.models import Producto
-from django.template.loader import render_to_string
+from django.http import JsonResponse
 
 # Create your views here.
 def agregar_producto(request, producto_id):
@@ -48,24 +48,19 @@ def update_cart(request):
         product_data = carro.carro.get(str(product_id), None)
         total = sum(float(item['precio']) for item in carro.carro.values())
         
-        # Renderiza el HTML actualizado del carrito
-        cart_html = render_to_string('carro/widget.html', {'carro': carro.carro}, request=request)
-        
         return JsonResponse({
             'success': True,
             'quantity': product_data['cantidad'] if product_data else 0,
             'price': product_data['precio'] if product_data else 0,
-            'name': producto.nombre,
             'total': total,
-            'cart_empty': len(carro.carro) == 0,
-            'cart_html': cart_html  # Incluye el HTML en la respuesta JSON
+            'cart_empty': len(carro.carro) == 0
         })
     except Producto.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Producto no encontrado'}, status=404)
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
-    
+
 def cart_view(request):
     carro = Carro(request)
     return render(request, 'carro/carro.html', {'carro': carro})
