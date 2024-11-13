@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +23,7 @@
     <!-- Custom CSS -->
     <link href="{% static 'proyectowebapp/css/gestion.css' %}" rel="stylesheet">
     <link href="{% static 'proyectowebapp/css/base.css' %}" rel="stylesheet">
-    
+
     {% block extra_css %}{% endblock %}
 </head>
 
@@ -34,7 +35,9 @@
                     <i class="fas fa-box-open me-2" aria-hidden="true"></i>
                     <span class="fw-bold">DON ONOFRE</span>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -54,6 +57,19 @@
                         <li class="nav-item {% if request.path|slice:':6' == '/blog/' %}active{% endif %}">
                             <a class="nav-link" href="{% url 'Blog' %}">Blog</a>
                         </li>
+                        <!-- Sección de Usuario -->
+                        {% if request.user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user"></i> {{ request.user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="{% url 'profile' %}">Perfil</a></li>
+                                <li><a class="dropdown-item" href="{% url 'cerrar_sesion' %}">Cerrar sesión</a></li>
+                            </ul>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -64,15 +80,16 @@
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <h1 class="display-4 fw-bold animate__animated animate__fadeInLeft">Gestión de Pedidos</h1>
-                        <p class="lead animate__animated animate__fadeInLeft animate__delay-1s">Optimiza tu negocio con nuestra plataforma de gestión</p>
+                        <p class="lead animate__animated animate__fadeInLeft animate__delay-1s">Optimiza tu negocio con
+                            nuestra plataforma de gestión</p>
                     </div>
                     <div class="col-md-4 text-md-end animate__animated animate__fadeInRight">
                         {% if user.is_authenticated %}
-                            <span class="me-3">Bienvenido, {{ user.username }}</span>
-                            <a href="{% url 'cerrar_sesion' %}" class="btn btn-outline-light">Cerrar sesión</a>
+                        <span class="me-3">Bienvenido, {{ user.username }}</span>
+                        <!-- <a href="{% url 'cerrar_sesion' %}" class="btn btn-outline-light">Cerrar sesión</a> -->
                         {% else %}
-                            <a href="{% url 'logear' %}" class="btn btn-outline-light me-2">Login</a>
-                            <a href="{% url 'Autenticacion' %}" class="btn btn-light">Registrarse</a>
+                        <a href="{% url 'logear' %}" class="btn btn-outline-light me-2">Login</a>
+                        <a href="{% url 'Autenticacion' %}" class="btn btn-light">Registrarse</a>
                         {% endif %}
                     </div>
                 </div>
@@ -92,10 +109,14 @@
             <div class="row">
                 <div class="col-md-4 mb-3 mb-md-0">
                     <h5 class="text-uppercase mb-3">Síguenos</h5>
-                    <a href="#" class="footer-link me-3" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                    <a href="#" class="footer-link me-3" aria-label="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
-                    <a href="#" class="footer-link me-3" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                    <a href="#" class="footer-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                    <a href="#" class="footer-link me-3" aria-label="Facebook"><i class="fab fa-facebook-f"
+                            aria-hidden="true"></i></a>
+                    <a href="#" class="footer-link me-3" aria-label="Twitter"><i class="fab fa-twitter"
+                            aria-hidden="true"></i></a>
+                    <a href="#" class="footer-link me-3" aria-label="Instagram"><i class="fab fa-instagram"
+                            aria-hidden="true"></i></a>
+                    <a href="#" class="footer-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"
+                            aria-hidden="true"></i></a>
                 </div>
                 <div class="col-md-4 mb-3 mb-md-0">
                     <h5 class="text-uppercase mb-3">Enlaces útiles</h5>
@@ -124,10 +145,11 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- Custom JS -->
     <script src="{% static 'proyectowebapp/js/base.js' %}"></script>
-    
+
     {% block extra_js %}{% endblock %}
 </body>
+
 </html>
