@@ -182,7 +182,7 @@
                 {% for producto in productos %}
                 <div class="col">
                     <div class="card h-100 shadow-sm hover-effect">
-                        <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                        <img src=" /media/{{ producto.imagen }}" class="card-img-top" alt="{{ producto.nombre }}">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">{{ producto.nombre }}</h5>
                             <p class="card-text mb-4 text-primary fw-bold">{{ producto.precio }} ₲</p>

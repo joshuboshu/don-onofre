@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:14
+    restart: always
+    container_name: postgresql
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: prueba_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5435:5432"  # Puerto mapeado de PostgreSQL (host:container)
+
+  web:
+    build: .
+    container_name: django
+    command: python manage.py runserver 0.0.0.0:8002  # Cambiado a 8002
+    volumes:
+      - .:/app  # Cambiado a /app, que es el directorio de trabajo en el Dockerfile
+    ports:
+      - "8002:8002"  # Mapea el mismo puerto dentro y fuera del contenedor
+    environment:
+      - POSTGRES_NAME=prueba_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_HOST=db  # Asegura que el host sea el nombre del servicio de la base de datos
+      - POSTGRES_PORT=5432  # Puerto interno del contenedor de PostgreSQL
+    depends_on:
+      - db
+
+volumes:
+  db-data:
