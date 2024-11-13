@@ -1,6 +1,5 @@
 {% extends "proyectowebapp/base.html" %}
 {% load static %}
-{% load crispy_forms_tags %}
 
 {% block content %}
 <div class="container py-5">
@@ -14,13 +13,16 @@
                     <form method="POST" action="">
                         {% csrf_token %}
                         <div class="mb-3">
-                            {{ form.username|as_crispy_field }}
+                            <label for="username" class="form-label">Usuario</label>
+                            <input type="text" id="username" name="username" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            {{ form.password1|as_crispy_field }}
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" id="password" name="password" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            {{ form.password2|as_crispy_field }}
+                            <label for="confirm_password" class="form-label">Confirmar Contraseña</label>
+                            <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
                         </div>
                         <div class="d-grid gap-2 mt-4">
                             <button type="submit" class="btn btn-primary btn-lg">
