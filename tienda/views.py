@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 from rules.contrib.views import permission_required
 
 
-@permission_required('tienda.view_producto')
 def tienda(request):
     productos = Producto.objects.all()
     categorias = CategoriaProd.objects.all()  # Obtener todas las categorías
