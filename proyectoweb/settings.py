@@ -85,13 +85,9 @@ TEMPLATES = [
     },
 ]
 
-<<<<<<< HEAD
-WSGI_APPLICATION = 'proyectoweb.wsgi.application'
-=======
 # Aplicación WSGI para desplegar el proyecto
 WSGI_APPLICATION = 'proyectoweb.wsgi.app'
 
->>>>>>> origin/docker
 
 # Configuración de la base de datos
 DATABASES = {
@@ -113,7 +109,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-<<<<<<< HEAD
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -133,26 +128,11 @@ SITE_ID = 1
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-=======
-# Internacionalización y zona horaria
-LANGUAGE_CODE = 'es-es'  # Configuración de idioma
-TIME_ZONE = 'UTC'  # Configuración de zona horaria
-USE_I18N = True  # Habilitar traducciones
-USE_TZ = True  # Habilitar soporte para zonas horarias
-SITE_ID = 1
-
-# Archivos estáticos (CSS, JavaScript, imágenes)
-STATIC_URL = '/static/'  # URL de los archivos estáticos
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Directorios adicionales de archivos estáticos
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Directorio de salida de los archivos estáticos
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # Uso de WhiteNoise para producción
->>>>>>> origin/docker
 
 STATICFILES_IGNORE_PATTERNS = [
     "proyectowebapp/vendor/font-awesome/less/*.less",  # Ignorar archivos .less de FontAwesome
 ]
 
-<<<<<<< HEAD
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # Default primary key field type
@@ -161,26 +141,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Configuracion de contacto
-=======
-# Archivos multimedia (imagenes, videos, etc.)
-MEDIA_URL = '/media/'  # URL para acceder a los archivos de medios
-MEDIA_ROOT = BASE_DIR / 'media'  # Directorio donde se almacenan los archivos de medios
-
-# Configuración de correo
->>>>>>> origin/docker
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-<<<<<<< HEAD
 EMAIL_HOST_USER = "tucorreo@gmail.com"
 EMAIL_HOST_PASSWORD = "tupassword"
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-=======
-EMAIL_HOST_USER = "tucorreo@gmail.com"  # Cambia este valor por tu correo real
-EMAIL_HOST_PASSWORD = "tupassword"  # Cambia este valor por tu contraseña real
->>>>>>> origin/docker
 
 # Formateo de mensajes de error en el frontend
 MESSAGE_TAGS = {
@@ -191,21 +159,7 @@ MESSAGE_TAGS = {
     mensajes_de_error.ERROR: 'danger',
 }
 
-<<<<<<< HEAD
 AUTHENTICATION_BACKENDS = (
     'rules.permissions.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
-=======
-# Configuración de formularios
-CRISPY_TEMPLATE_PACK = 'bootstrap4'  # Paquete de plantillas para formularios con Bootstrap
-
-# Configuración de autenticación
-AUTHENTICATION_BACKENDS = (
-    'rules.permissions.ObjectPermissionBackend',  # Usar django-rules para permisos de objetos
-    'django.contrib.auth.backends.ModelBackend',  # Backend predeterminado para autenticación
-)
-
-# Tipo de campo de clave primaria por defecto
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
->>>>>>> origin/docker
