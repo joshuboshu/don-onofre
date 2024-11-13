@@ -319,6 +319,44 @@
     </div>
 </div>
 
+<!-- Modal de confirmación para eliminar un producto -->
+<div id="delete-confirmation-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmación de Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar este producto?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-btn">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de éxito para eliminación -->
+<div id="delete-success-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Producto Eliminado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p>El producto ha sido eliminado exitosamente.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {% endblock %}
 
 {% block extra_js %}
@@ -349,78 +387,61 @@
 
         // Guardar producto después de agregarlo
         $(document).on('click', '#save-product-btn', function () {
-    var formData = new FormData($('#add-product-form')[0]);
-    $.ajax({
-        url: "{% url 'agregar_producto' %}",
-        method: "POST",
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            $('#add-product-modal').modal('hide');
-            $('#product-added-confirmation-modal').modal('show');
+            var formData = new FormData($('#add-product-form')[0]);
+            $.ajax({
+                url: "{% url 'agregar_producto' %}",
+                method: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    $('#add-product-modal').modal('hide');
+                    $('#product-added-confirmation-modal').modal('show');
 
-            // Agregar el nuevo producto al DOM sin recargar
-            var newProduct = `
-                <div class="col">
-                    <div class="card h-100 shadow-sm hover-effect">
-                        <img src="${response.imagen_url}" class="card-img-top" alt="${response.nombre}">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">${response.nombre}</h5>
-                            <p class="card-text mb-4 text-primary fw-bold">${response.precio} ₲</p>
-                            <div class="mt-auto text-center">
-                                
-                                ${!response.is_superuser ? `
-                                <button class="btn btn-primary add-to-cart" data-product-id="${response.id}">
-                                    <i class="fas fa-cart-plus me-2"></i>Agregar al carrito
-                                </button>` : ''}
+                    // Recargar la página después de 3 segundos
+                    setTimeout(function () {
+                        $('#product-added-confirmation-modal').modal('hide');
+                        location.reload();
+                    }, 3000);
+                },
+                error: function () {
+                    alert("Hubo un error al guardar el producto.");
+                }
+            });
+        });
 
-                                ${response.can_delete ? `
-                                <form id="delete-product-form-${response.id}"
-                                      action="{% url 'eliminar_producto' producto_id=0 %}".replace('0', response.id) method="POST"
-                                      style="display: inline;">
-                                    {% csrf_token %}
-                                    <button type="button" class="btn btn-danger delete-product-btn" data-product-id="${response.id}">
-                                        <i class="fas fa-trash-alt me-2"></i>Eliminar Producto
-                                    </button>
-                                </form>` : ''}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
+        var deleteProductId = null;
 
-            // Añadir el nuevo producto al contenedor
-            $('.row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-4').append(newProduct);
-
-            // Cerrar el modal de confirmación después de 3 segundos
-            setTimeout(function () {
-                $('#product-added-confirmation-modal').modal('hide');
-            }, 3000);
-        },
-        error: function () {
-            alert("Hubo un error al guardar el producto.");
-        }
-    });
-});
-
-
-        // Eliminar producto mediante AJAX
+        // Mostrar el modal de confirmación de eliminación
         $(document).on('click', '.delete-product-btn', function () {
-            var productId = $(this).data('product-id');
-            var form = $('#delete-product-form-' + productId);
+            deleteProductId = $(this).data('product-id');
+            $('#delete-confirmation-modal').modal('show');
+        });
 
-            if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+        // Confirmar la eliminación
+        $('#confirm-delete-btn').click(function () {
+            if (deleteProductId !== null) {
+                var form = $('#delete-product-form-' + deleteProductId);
+
                 $.ajax({
                     url: form.attr('action'),
                     method: 'POST',
                     data: form.serialize(),
                     success: function () {
-                        $('#producto-' + productId).remove();
-                        alert("Producto eliminado exitosamente.");
+                        $('#delete-confirmation-modal').modal('hide');
+                        $('#delete-success-modal').modal('show');
+
+                        // Recargar la página después de 3 segundos
+                        setTimeout(function () {
+                            $('#delete-success-modal').modal('hide');
+                            location.reload();
+                        }, 3000);
+
+                        deleteProductId = null;
                     },
                     error: function () {
                         alert("Hubo un error al eliminar el producto.");
+                        deleteProductId = null;
                     }
                 });
             }
@@ -451,5 +472,7 @@
         });
     });
 </script>
+
+
 
 {% endblock %}
