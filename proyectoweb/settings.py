@@ -77,8 +77,12 @@ WSGI_APPLICATION = 'proyectoweb.wsgi.app'
 # Configuración de la base de datos
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # Motor de base de datos
-        'NAME': BASE_DIR / "db.sqlite3",  # Archivo de la base de datos SQLite
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
+        'PORT': os.getenv('POSTGRES_PORT', '5432'),
     }
 }
 
