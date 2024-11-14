@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',  # Necesario si planeas agregar login social
     # Añadir proveedores sociales según necesites, por ejemplo:
     'allauth.socialaccount.providers.google',
+    'widget_tweaks',
+    'material',
     'proyectowebapp',
     'servicios',
     'blog',
@@ -146,7 +148,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "tucorreo@gmail.com"
 EMAIL_HOST_PASSWORD = "tupassword"
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 # Formateo de mensajes de error en el frontend
 MESSAGE_TAGS = {
