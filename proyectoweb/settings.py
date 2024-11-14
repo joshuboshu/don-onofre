@@ -190,3 +190,6 @@ ACCOUNT_USERNAME_REQUIRED = True  # Requiere nombre de usuario
 ACCOUNT_EMAIL_REQUIRED = False  # No requiere correo electrónico
 ACCOUNT_USER_MODEL_USERNAME_FIELD = "username"  # Campo de nombre de usuario en el modelo de usuario
 
+ACCOUNT_LOGOUT_ON_GET = True
+
+
