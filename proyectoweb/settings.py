@@ -29,6 +29,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',  # Necesario si planeas agregar login social
+    # Añadir proveedores sociales según necesites, por ejemplo:
+    'allauth.socialaccount.providers.google',
     'proyectowebapp',
     'servicios',
     'blog',
@@ -47,6 +52,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Para servir archivos estáticos en producción
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -116,7 +122,9 @@ SITE_ID = 1
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [
+    BASE_DIR / "static",  # Asegúrate de que este directorio existe en tu proyecto
+]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_IGNORE_PATTERNS = [
@@ -153,3 +161,26 @@ AUTHENTICATION_BACKENDS = (
     'rules.permissions.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+
+# Obligar a los usuarios a verificar su correo electrónico
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_REQUIRED = True
+
+# Redirección después de iniciar o cerrar sesión
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
+# Hacer que el correo electrónico sea único para cada usuario
+ACCOUNT_UNIQUE_EMAIL = True
+
+
+# Autenticación solo con el correo electrónico
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USERNAME_REQUIRED = False
+
+# Seguridad adicional
+SESSION_COOKIE_SECURE = True  # Solo envía cookies en conexiones HTTPS
+CSRF_COOKIE_SECURE = True     # Asegura la cookie de CSRF solo para HTTPS
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3  # Expiración de enlaces de confirmación de email

@@ -13,6 +13,7 @@ urlpatterns = [
     path('autenticacion/', include('autenticacion.urls')),
     path('pedidos/', include('pedidos.urls')),
     path('users/', include('users.urls')),
+    path('accounts/', include('allauth.urls')),  # Incluye todas las rutas de django-allauth
     path('', include('proyectowebapp.urls')),
 ]
 
