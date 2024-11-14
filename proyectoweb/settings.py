@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     # Añadir proveedores sociales según necesites, por ejemplo:
     'allauth.socialaccount.providers.google',
     'widget_tweaks',
-    'material',
     'proyectowebapp',
     'servicios',
     'blog',
@@ -44,7 +43,7 @@ INSTALLED_APPS = [
     'carro',
     'autenticacion',
     'crispy_forms',
-    'crispy_bootstrap4',
+    'crispy_bootstrap5',
     'pedidos',
     'rules', 
 ]
@@ -159,15 +158,12 @@ MESSAGE_TAGS = {
     mensajes_de_error.ERROR: 'danger',
 }
 
-AUTHENTICATION_BACKENDS = (
+AUTHENTICATION_BACKENDS = [
     'rules.permissions.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
-)
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
-
-# Obligar a los usuarios a verificar su correo electrónico
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_EMAIL_REQUIRED = True
 
 # Redirección después de iniciar o cerrar sesión
 LOGIN_REDIRECT_URL = "/"
@@ -178,11 +174,19 @@ ACCOUNT_UNIQUE_EMAIL = True
 
 
 # Autenticación solo con el correo electrónico
-ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_USERNAME_REQUIRED = False
 
 # Seguridad adicional
 SESSION_COOKIE_SECURE = True  # Solo envía cookies en conexiones HTTPS
 CSRF_COOKIE_SECURE = True     # Asegura la cookie de CSRF solo para HTTPS
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3  # Expiración de enlaces de confirmación de email
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# Configuración de allauth para usar solo nombre de usuario
+ACCOUNT_AUTHENTICATION_METHOD = "username"  # Autenticación solo con nombre de usuario
+ACCOUNT_USERNAME_REQUIRED = True  # Requiere nombre de usuario
+ACCOUNT_EMAIL_REQUIRED = False  # No requiere correo electrónico
+ACCOUNT_USER_MODEL_USERNAME_FIELD = "username"  # Campo de nombre de usuario en el modelo de usuario
+
