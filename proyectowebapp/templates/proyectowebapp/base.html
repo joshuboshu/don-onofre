@@ -24,20 +24,71 @@
     <link href="{% static 'proyectowebapp/css/base.css' %}" rel="stylesheet">
     
     {% block extra_css %}{% endblock %}
+
+    <style>
+        /* Quitar subrayado del enlace en el botón de Categorías */
+        .navbar .nav-link.dropdown-toggle {
+            text-decoration: none !important;
+        }
+
+        /* Icono de categorías estilo hamburguesa */
+        .icon-categorias {
+            font-size: 1.25rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Mostrar menú desplegable al pasar el cursor */
+        .nav-item.dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* Controlar la transición y opacidad */
+        .dropdown-menu {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-item.dropdown:hover .dropdown-menu {
+            display: block;
+            opacity: 1;
+        }
+    </style>
 </head>
 
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
-            <div class="container">
-                <a class="navbar-brand d-flex align-items-center" href="{% url 'Home' %}">
-                    <i class="fas fa-box-open me-2" aria-hidden="true"></i>
-                    <span class="fw-bold">DON ONOFRE</span>
-                </a>
+            <div class="container d-flex justify-content-between">
+                
+                <!-- Botón de Categorías al extremo izquierdo -->
+                <li class="nav-item dropdown d-flex align-items-center">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="categoriasDropdown" role="button" aria-expanded="false">
+                        <i class="fas fa-bars icon-categorias me-2"></i>Categorías
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="categoriasDropdown">
+                        <li><a class="dropdown-item" href="/categoria/1">Categoría 1</a></li>
+                        <li><a class="dropdown-item" href="/categoria/2">Categoría 2</a></li>
+                        <li><a class="dropdown-item" href="/categoria/3">Categoría 3</a></li>
+                        <!-- Agrega más enlaces según tus categorías -->
+                    </ul>
+                </li>
+
+                <!-- Logo centrado de DON ONOFRE -->
+                <div class="d-flex flex-grow-1 justify-content-center">
+                    <a class="navbar-brand d-flex align-items-center" href="{% url 'Home' %}">
+                        <i class="fas fa-box-open me-2" aria-hidden="true"></i>
+                        <span class="fw-bold">DON ONOFRE</span>
+                    </a>
+                </div>
+
+                <!-- Menú de navegación al extremo derecho -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
+
+                <div class="collapse navbar-collapse flex-grow-0" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item {% if request.path == '/' %}active{% endif %}">
                             <a class="nav-link" href="{% url 'Home' %}">Inicio</a>
