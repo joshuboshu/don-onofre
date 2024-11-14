@@ -8,7 +8,7 @@
             <h2 class="text-center mb-4">Iniciar Sesión</h2>
             <form method="post" action="{% url 'account_login' %}" class="p-4 border rounded shadow-sm bg-light">
                 {% csrf_token %}
-                
+
                 <!-- Campo oculto para redirección a Home -->
                 <input type="hidden" name="next" value="{% url 'Home' %}">
 

@@ -164,6 +164,8 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Redirección después de iniciar o cerrar sesión
 LOGIN_REDIRECT_URL = "/"
@@ -171,10 +173,7 @@ LOGOUT_REDIRECT_URL = "/"
 
 # Hacer que el correo electrónico sea único para cada usuario
 ACCOUNT_UNIQUE_EMAIL = True
-
-
-# Autenticación solo con el correo electrónico
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECT = True
 
 # Seguridad adicional
 SESSION_COOKIE_SECURE = True  # Solo envía cookies en conexiones HTTPS
@@ -185,11 +184,13 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Configuración de allauth para usar solo nombre de usuario
-ACCOUNT_AUTHENTICATION_METHOD = "username"  # Autenticación solo con nombre de usuario
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"  # Autenticación solo con nombre de usuario
 ACCOUNT_USERNAME_REQUIRED = True  # Requiere nombre de usuario
-ACCOUNT_EMAIL_REQUIRED = False  # No requiere correo electrónico
-ACCOUNT_USER_MODEL_USERNAME_FIELD = "username"  # Campo de nombre de usuario en el modelo de usuario
+ACCOUNT_EMAIL_REQUIRED = True  # requiere correo electrónico
 
 ACCOUNT_LOGOUT_ON_GET = True
+
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5  # Límite de intentos de inicio de sesión antes de bloquear temporalmente
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300  # Tiempo de espera en segundos antes de reintentar
 
 
