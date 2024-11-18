@@ -164,9 +164,11 @@ h5 {
                             <p class="card-text mb-4">{{ producto.precio }} ₲</p>
                             <div class="mt-auto text-center">
                                 {% if not request.user.is_superuser %}
-                                <button type="button" class="btn btn-success add-to-cart" data-product-id="{{ producto.id }}">
-                                    <i class="fas fa-cart-plus me-2"></i>Agregar al carrito
-                                </button>
+                                    {% if request.user.is_authenticated %}
+                                    <button type="button" class="btn btn-success add-to-cart" data-product-id="{{ producto.id }}">
+                                        <i class="fas fa-cart-plus me-2"></i>Agregar al carrito
+                                    </button>
+                                    {% endif %}
                                 {% endif %}
 
                                 {% has_perm "tienda.delete_producto" user as can_delete_producto %}
@@ -210,9 +212,9 @@ h5 {
                 {% if request.user.is_authenticated %}
                 {% include "carro/widget.html" %}
                 {% else %}
-                <button type="button" class="btn btn-success add-to-cart" data-product-id="{{ producto.id }}">
-                    <i class="fas fa-cart-plus me-2"></i>Agregar al carrito
-                </button>                
+                <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Iniciar sesión para ver el carrito.
+                </div>                  
                 {% endif %}
             </div>
             {% endif %}
