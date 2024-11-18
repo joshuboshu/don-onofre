@@ -46,8 +46,6 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'pedidos',
     'rules', 
-    'livereload',
-    'channels',
 ]
 
 # Middleware
@@ -55,7 +53,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Para servir archivos estáticos en producción
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'livereload.middleware.LiveReloadScript',
     'allauth.account.middleware.AccountMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -88,7 +85,6 @@ TEMPLATES = [
 # Aplicación WSGI para desplegar el proyecto
 WSGI_APPLICATION = 'proyectoweb.wsgi.app'
 
-ASGI_APPLICATION = 'proyectoweb.asgi.application'
 
 # Configuración de la base de datos
 DATABASES = {
