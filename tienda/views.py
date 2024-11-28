@@ -10,6 +10,26 @@ def tienda(request):
     categorias = CategoriaProd.objects.all()  # Obtener todas las categorías
     return render(request, "tienda/tienda.html", {"productos": productos, "categorias": categorias})
 
+@login_required
+@permission_required('tienda.delete_categoriaprod', raise_exception=True)
+def listar_categorias(request):
+    categorias = CategoriaProd.objects.all()
+    html = render(request, 'tienda/listar_categorias.html', {'categorias': categorias}).content.decode('utf-8')
+    return JsonResponse({'html': html})
+
+@login_required
+@permission_required('tienda.delete_categoriaprod', raise_exception=True)
+def eliminar_categoria(request, categoria_id):
+    if request.method == "POST":
+        try:
+            categoria = CategoriaProd.objects.get(id=categoria_id)
+            categoria.delete()
+            return JsonResponse({'success': True, 'message': 'Categoría eliminada correctamente.'})
+        except CategoriaProd.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Categoría no encontrada.'})
+    return JsonResponse({'success': False, 'message': 'Método no permitido.'})
+
+
 
 @login_required
 @permission_required('tienda.add_categoriaprod', raise_exception=True)
