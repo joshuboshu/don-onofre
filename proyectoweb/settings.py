@@ -29,6 +29,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',  # Necesario si planeas agregar login social
+    # Añadir proveedores sociales según necesites, por ejemplo:
+    'allauth.socialaccount.providers.google',
+    'widget_tweaks',
     'proyectowebapp',
     'servicios',
     'blog',
@@ -37,7 +43,7 @@ INSTALLED_APPS = [
     'carro',
     'autenticacion',
     'crispy_forms',
-    'crispy_bootstrap4',
+    'crispy_bootstrap5',
     'pedidos',
     'rules', 
 ]
@@ -47,6 +53,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Para servir archivos estáticos en producción
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -116,7 +123,9 @@ SITE_ID = 1
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [
+    BASE_DIR / "static",  # Asegúrate de que este directorio existe en tu proyecto
+]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_IGNORE_PATTERNS = [
@@ -138,7 +147,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "tucorreo@gmail.com"
 EMAIL_HOST_PASSWORD = "tupassword"
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 # Formateo de mensajes de error en el frontend
 MESSAGE_TAGS = {
@@ -149,7 +158,39 @@ MESSAGE_TAGS = {
     mensajes_de_error.ERROR: 'danger',
 }
 
-AUTHENTICATION_BACKENDS = (
+AUTHENTICATION_BACKENDS = [
     'rules.permissions.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
-)
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Redirección después de iniciar o cerrar sesión
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
+# Hacer que el correo electrónico sea único para cada usuario
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECT = True
+
+# Seguridad adicional
+SESSION_COOKIE_SECURE = True  # Solo envía cookies en conexiones HTTPS
+CSRF_COOKIE_SECURE = True     # Asegura la cookie de CSRF solo para HTTPS
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3  # Expiración de enlaces de confirmación de email
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# Configuración de allauth para usar solo nombre de usuario
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"  # Autenticación solo con nombre de usuario
+ACCOUNT_USERNAME_REQUIRED = True  # Requiere nombre de usuario
+ACCOUNT_EMAIL_REQUIRED = True  # requiere correo electrónico
+
+ACCOUNT_LOGOUT_ON_GET = True
+
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5  # Límite de intentos de inicio de sesión antes de bloquear temporalmente
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300  # Tiempo de espera en segundos antes de reintentar
+
+

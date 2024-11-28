@@ -18,9 +18,9 @@
                     {% if request.session.carro.items %}
                         {% for key, value in request.session.carro.items %}
                         <tr id="product-row-{{ value.producto_id }}">
-                            <td>{{value.nombre}}</td>
+                            <td>{{ value.nombre }}</td>
                             <td>
-                                <span id="quantity-{{ value.producto_id }}" class="badge bg-secondary">{{value.cantidad}}</span>
+                                <span id="quantity-{{ value.producto_id }}" class="badge bg-secondary">{{ value.cantidad }}</span>
                             </td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Acciones de producto">
@@ -31,7 +31,7 @@
                                         <i class="fas fa-minus"></i>
                                     </button>
                                 </div>
-                                <span id="price-{{ value.producto_id }}" class="ms-2">{{value.precio}} ₲</span>
+                                <span id="price-{{ value.producto_id }}" class="ms-2">{{ value.precio }} ₲</span>
                             </td>
                         </tr>
                         {% endfor %}
@@ -48,7 +48,7 @@
                 <tfoot>
                     <tr>
                         <td colspan="3" class="text-end">
-                            <strong>Total: <span id="total-price" class="text-primary">{{importe_total_carro}}</span> ₲</strong>
+                            <strong>Total: <span id="total-price" class="text-primary">{{ importe_total_carro }} ₲</span></strong>
                         </td>
                     </tr>
                 </tfoot>
@@ -75,5 +75,43 @@
 {% block extra_js %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-<script src="{% static 'proyectowebapp/js/widget.js' %}"></script>
+<script>
+    function getCsrfToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+}
+
+function updateCart(productId, action) {
+    $.ajax({
+        url: "{% url 'carro:update_cart' %}",
+        type: 'POST',
+        data: {
+            'product_id': productId,
+            'action': action,
+            'csrfmiddlewaretoken': "{{ csrf_token }}"  // Token CSRF insertado directamente
+        },
+        success: function(response) {
+            if(response.success) {
+                $('#quantity-' + productId).text(response.quantity);
+                $('#price-' + productId).text(response.price + ' ₲');
+                $('#total-price').text(response.total + ' ₲');
+                
+                if(response.quantity === 0) {
+                    $('#product-row-' + productId).fadeOut(300, function() { $(this).remove(); });
+                }
+                
+                if(response.cart_empty) {
+                    $('#cart-body').html('<tr><td colspan="3"><div class="alert alert-danger text-center mb-0">Sin productos</div></td></tr>');
+                    $('.card-footer').html("<a href='{% url 'Tienda' %}' class='btn btn-primary'><i class='fas fa-store me-2'></i>Ir a la Tienda</a>");
+                }
+            }
+        },
+        error: function(xhr, errmsg, err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+            alert('Error al actualizar el carrito');
+        }
+    });
+}
+
+
+</script>
 {% endblock %}

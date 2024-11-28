@@ -6,191 +6,169 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <link rel="stylesheet" href="{% static 'proyectowebapp/css/tienda.css' %}">
 <style>
-    /* Estilo del modal */
-    .modal-content {
-        border-radius: 10px;
-        border: none;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        animation: modal-fade-in 0.3s ease-in-out;
-    }
+    /* Colores base y tipografía */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fc;
+    color: #343a40;
+}
 
-    .modal-header {
-        background-color: #007bff;
-        color: white;
-        border-radius: 10px 10px 0 0;
-        text-align: center;
-    }
+h5 {
+    font-weight: bold;
+    color: #343a40;
+}
 
-    .modal-body {
-        padding: 30px;
-        background-color: #f8f9fa;
-        border-radius: 0 0 10px 10px;
-    }
+/* Tarjetas de Productos */
+.card {
+    border: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
 
-    .modal-footer {
-        border-top: 1px solid #dee2e6;
-        text-align: center;
-    }
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
 
-    @keyframes modal-fade-in {
-        from {
-            opacity: 0;
-            transform: translateY(-30px);
-        }
+.card-img-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 200px;
+    object-fit: cover;
+}
 
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
+.card-title.prod {
+    color: #007bff;
+}
 
-    /* Botón "Agregar Producto" */
-    #add-product-btn {
-        width: 100%;
-        padding: 15px;
-        font-size: 18px;
-        background-color: #28a745;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        margin-bottom: 10px;
-    }
+.card-text {
+    color: #28a745;
+    font-weight: 500;
+}
 
-    #add-product-btn:hover {
-        background-color: #218838;
-    }
+/* Botones */
+.btn {
+    border-radius: 8px;
+    padding: 10px 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
-    /* Botón "Agregar Categoria" */
-    #add-category-btn {
-        width: 100%;
-        padding: 15px;
-        font-size: 18px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    }
+.btn-primary {
+    background-color: #007bff;
+    border: 0;
+}
 
-    #add-category-btn:hover {
-        background-color: #0056b3;
-    }
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
 
-    /* Estilo del botón "Eliminar Producto" */
-    #delete-product-btn {
-        width: 100%;
-        padding: 15px;
-        font-size: 18px;
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        margin-bottom: 10px;
-    }
+.btn-success {
+    background-color: #28a745;
+    border: 0;
+}
 
-    #delete-product-btn:hover {
-        background-color: #c82333;
-    }
+.btn-success:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
 
-    /* Estilo del formulario en el modal */
-    .form-group {
-        margin-bottom: 20px;
-    }
+.btn-danger {
+    background-color: #dc3545;
+    border: 0;
+}
 
-    .form-control {
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        padding: 10px;
-        font-size: 16px;
-    }
+.btn-danger:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+}
 
-    .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-    }
+/* Modal */
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
 
-    .form-label {
-        font-weight: bold;
-        font-size: 16px;
-        color: #333;
-    }
+.modal-header {
+    background-color: #007bff;
+    color: #fff;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
 
-    .btn-primary {
-        background-color: #007bff;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 20px;
-        font-size: 16px;
-    }
+.modal-body {
+    background-color: #f8f9fa;
+    padding: 30px;
+}
 
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
+/* Formulario */
+.form-group {
+    margin-bottom: 20px;
+}
 
-    .btn-secondary {
-        background-color: #6c757d;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 20px;
-        font-size: 16px;
-    }
+.form-control {
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-    .btn-secondary:hover {
-        background-color: #5a6268;
-    }
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
 
-    /* Campos de entrada */
-    input[type="text"],
-    input[type="number"],
-    input[type="file"] {
-        border-radius: 5px;
-        padding: 10px;
-        font-size: 16px;
-        width: 100%;
-        box-sizing: border-box;
-    }
+/* Iconos de Carrito y Mensajes */
+.alert-warning {
+    display: flex;
+    align-items: center;
+}
 
-    input[type="text"]:focus,
-    input[type="number"]:focus,
-    input[type="file"]:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-    }
+.alert-warning i {
+    margin-right: 8px;
+}
 
-    select.form-control {
-        border-radius: 5px;
-        padding: 10px;
-        font-size: 16px;
-        width: 100%;
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
     }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-    select.form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-    }
+.modal-content, .card, .btn {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container py-5">
+    <h1 class="text-primary mb-4">Nuestros Productos</h1>
     <div class="row">
         <div class="col-lg-9">
-            <h1 class="mb-4 text-primary">Nuestros Productos</h1>
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                 {% for producto in productos %}
                 <div class="col">
-                    <div class="card h-100 shadow-sm hover-effect">
+                    <div class="card h-100 shadow-sm">
                         <img src=" /media/{{ producto.imagen }}" class="card-img-top" alt="{{ producto.nombre }}">
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">{{ producto.nombre }}</h5>
-                            <p class="card-text mb-4 text-primary fw-bold">{{ producto.precio }} ₲</p>
+                            <h5 class="card-title prod">{{ producto.nombre }}</h5>
+                            <p class="card-text mb-4">{{ producto.precio }} ₲</p>
                             <div class="mt-auto text-center">
                                 {% if not request.user.is_superuser %}
-                                <button class="btn btn-primary add-to-cart" data-product-id="{{ producto.id }}">
-                                    <i class="fas fa-cart-plus me-2"></i>Agregar al carrito
-                                </button>
+                                    {% if request.user.is_authenticated %}
+                                    <button type="button" class="btn btn-success add-to-cart" data-product-id="{{ producto.id }}">
+                                        <i class="fas fa-cart-plus me-2"></i>Agregar al carrito
+                                    </button>
+                                    {% endif %}
                                 {% endif %}
 
                                 {% has_perm "tienda.delete_producto" user as can_delete_producto %}
@@ -199,12 +177,11 @@
                                     action="{% url 'eliminar_producto' producto_id=producto.id %}" method="POST"
                                     style="display: inline;">
                                     {% csrf_token %}
-                                    <button type="button" id="delete-product-btn"
-                                        class="btn btn-danger delete-product-btn" data-product-id="{{ producto.id }}">
+                                    <button type="button" class="btn btn-danger delete-product-btn"
+                                        data-product-id="{{ producto.id }}">
                                         <i class="fas fa-trash-alt me-2"></i>Eliminar Producto
                                     </button>
                                 </form>
-
                                 {% endif %}
                             </div>
                         </div>
@@ -219,13 +196,13 @@
         <div class="col-lg-3 mt-4 mt-lg-0">
             {% has_perm "tienda.add_producto" user as can_add_producto %}
             {% if can_add_producto %}
-            <button class="btn" id="add-product-btn">
+            <button class="btn btn-success w-100 mb-2" id="add-product-btn">
                 <i class="fas fa-plus me-2"></i>Agregar Producto
             </button>
             {% endif %}
             {% has_perm "tienda.add_categoriaprod" user as can_add_categoriaprod %}
             {% if can_add_categoriaprod %}
-            <button class="btn" id="add-category-btn">
+            <button class="btn btn-primary w-100" id="add-category-btn">
                 <i class="fas fa-tag me-2"></i>Agregar Categoría
             </button>
             {% endif %}
@@ -237,7 +214,7 @@
                 {% else %}
                 <div class="alert alert-warning" role="alert">
                     <i class="fas fa-exclamation-triangle me-2"></i>Iniciar sesión para ver el carrito.
-                </div>
+                </div>                  
                 {% endif %}
             </div>
             {% endif %}
@@ -319,6 +296,44 @@
     </div>
 </div>
 
+<!-- Modal de confirmación para eliminar un producto -->
+<div id="delete-confirmation-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmación de Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar este producto?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-btn">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de éxito para eliminación -->
+<div id="delete-success-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Producto Eliminado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p>El producto ha sido eliminado exitosamente.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {% endblock %}
 
 {% block extra_js %}
@@ -339,6 +354,33 @@
             });
         }
 
+        // Función para agregar productos al carrito
+        $('.add-to-cart').click(function () {
+            var productId = $(this).data('product-id');
+            
+            $.ajax({
+                url: "{% url 'carro:update_cart' %}",
+                method: "POST",
+                data: {
+                    'product_id': productId,
+                    'action': 'add',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // Actualiza el contenido del carrito con el HTML recibido
+                        $('#cart-widget').html(response.cart_html);
+                    } else {
+                        alert("Error: " + (response.error || "No se pudo agregar el producto."));
+                    }
+                },
+                error: function () {
+                    alert("Hubo un error al agregar el producto al carrito.");
+                }
+            });
+        });
+        
+        // Funciones para agregar productos y categorías
         $('#add-product-btn').click(function () {
             loadModalContent("{% url 'agregar_producto' %}", '#add-product-modal', '#add-product-form-container');
         });
@@ -347,80 +389,54 @@
             loadModalContent("{% url 'agregar_categoria' %}", '#add-category-modal', '#add-category-form-container');
         });
 
-        // Guardar producto después de agregarlo
         $(document).on('click', '#save-product-btn', function () {
-    var formData = new FormData($('#add-product-form')[0]);
-    $.ajax({
-        url: "{% url 'agregar_producto' %}",
-        method: "POST",
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            $('#add-product-modal').modal('hide');
-            $('#product-added-confirmation-modal').modal('show');
+            var formData = new FormData($('#add-product-form')[0]);
+            $.ajax({
+                url: "{% url 'agregar_producto' %}",
+                method: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    $('#add-product-modal').modal('hide');
+                    $('#product-added-confirmation-modal').modal('show');
+                    location.reload();
+                },
+                error: function () {
+                    alert("Hubo un error al guardar el producto.");
+                }
+            });
+        });
 
-            // Agregar el nuevo producto al DOM sin recargar
-            var newProduct = `
-                <div class="col">
-                    <div class="card h-100 shadow-sm hover-effect">
-                        <img src="${response.imagen_url}" class="card-img-top" alt="${response.nombre}">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">${response.nombre}</h5>
-                            <p class="card-text mb-4 text-primary fw-bold">${response.precio} ₲</p>
-                            <div class="mt-auto text-center">
-                                
-                                ${!response.is_superuser ? `
-                                <button class="btn btn-primary add-to-cart" data-product-id="${response.id}">
-                                    <i class="fas fa-cart-plus me-2"></i>Agregar al carrito
-                                </button>` : ''}
+        var deleteProductId = null;
 
-                                ${response.can_delete ? `
-                                <form id="delete-product-form-${response.id}"
-                                      action="{% url 'eliminar_producto' producto_id=0 %}".replace('0', response.id) method="POST"
-                                      style="display: inline;">
-                                    {% csrf_token %}
-                                    <button type="button" class="btn btn-danger delete-product-btn" data-product-id="${response.id}">
-                                        <i class="fas fa-trash-alt me-2"></i>Eliminar Producto
-                                    </button>
-                                </form>` : ''}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            // Añadir el nuevo producto al contenedor
-            $('.row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-4').append(newProduct);
-
-            // Cerrar el modal de confirmación después de 3 segundos
-            setTimeout(function () {
-                $('#product-added-confirmation-modal').modal('hide');
-            }, 3000);
-        },
-        error: function () {
-            alert("Hubo un error al guardar el producto.");
-        }
-    });
-});
-
-
-        // Eliminar producto mediante AJAX
+        // Mostrar el modal de confirmación de eliminación
         $(document).on('click', '.delete-product-btn', function () {
-            var productId = $(this).data('product-id');
-            var form = $('#delete-product-form-' + productId);
+            deleteProductId = $(this).data('product-id');
+            $('#delete-confirmation-modal').modal('show');
+        });
 
-            if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+        // Confirmar la eliminación
+        $('#confirm-delete-btn').click(function () {
+            if (deleteProductId !== null) {
+                var form = $('#delete-product-form-' + deleteProductId);
+
                 $.ajax({
                     url: form.attr('action'),
                     method: 'POST',
                     data: form.serialize(),
                     success: function () {
-                        $('#producto-' + productId).remove();
-                        alert("Producto eliminado exitosamente.");
+                        $('#delete-confirmation-modal').modal('hide');
+                        $('#delete-success-modal').modal('show');
+
+                        // Recargar la página inmediatamente
+                        location.reload();
+
+                        deleteProductId = null;
                     },
                     error: function () {
                         alert("Hubo un error al eliminar el producto.");
+                        deleteProductId = null;
                     }
                 });
             }
@@ -439,10 +455,8 @@
                     $('#add-category-modal').modal('hide');
                     $('#category-added-confirmation-modal').modal('show');
 
-                    setTimeout(function () {
-                        $('#category-added-confirmation-modal').modal('hide');
-                        location.reload();
-                    }, 3000);
+                    // Recargar la página inmediatamente
+                    location.reload();
                 },
                 error: function () {
                     alert("Hubo un error al guardar la categoría.");
@@ -451,5 +465,8 @@
         });
     });
 </script>
+
+
+
 
 {% endblock %}
