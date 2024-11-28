@@ -396,6 +396,35 @@ h5 {
         </div>
     </div>
 </div>
+
+<!-- Modal para gestionar categorías -->
+<div id="delete-category-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Gestionar Categorías</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="category-list">
+                        <!-- Lista de categorías cargada dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
@@ -415,46 +444,49 @@ h5 {
                 }
             });
         }
-// Abrir modal de eliminación de categorías y cargar lista de categorías
-    $('#delete-category-btn').click(function () {
-        $.ajax({
-            url: "{% url 'listar_categorias' %}",
-            method: "GET",
-            success: function (data) {
-                $('#category-list').html(data.html); // Cargar el HTML recibido
-                $('#delete-category-modal').modal('show');
-            },
-            error: function () {
-                alert("Hubo un error al cargar las categorías.");
-            }
-        });
-    });
 
-    // Manejar la eliminación de una categoría
-    $(document).on('click', '.delete-category-item', function () {
-        const categoryId = $(this).data('category-id');
+        
+        var deleteCategoryId = null;
 
-        if (confirm("¿Estás seguro de que deseas eliminar esta categoría?")) {
-            $.ajax({
-                url: `/eliminar_categoria/${categoryId}/`, // URL dinámica con el ID de la categoría
-                method: "POST",
-                data: {
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                },
-                success: function (response) {
-                    if (response.success) {
-                        alert(response.message);
-                        $(`#category-row-${categoryId}`).remove(); // Eliminar fila de la categoría
-                    } else {
-                        alert(response.message);
-                    }
-                },
-                error: function () {
-                    alert("Hubo un error al eliminar la categoría.");
-                }
-            });
+// Cargar lista de categorías al abrir el modal
+$('#delete-category-btn').click(function () {
+    $.ajax({
+        url: "{% url 'listar_categorias' %}",
+        method: "GET",
+        success: function (response) {
+            $('#category-list').html(response.html); // Reemplaza el contenido de la tabla
+            $('#delete-category-modal').modal('show');
+        },
+        error: function () {
+            alert("Error al cargar la lista de categorías.");
         }
     });
+});
+
+// Manejar la eliminación de una categoría
+$(document).on('click', '.delete-category-item', function () {
+    deleteCategoryId = $(this).data('category-id');
+    var form = $('#delete-category-form-' + deleteCategoryId);
+
+    if (confirm("¿Estás seguro de que deseas eliminar esta categoría?")) {
+        $.ajax({
+            url: form.attr('action'),
+            method: 'POST',
+            data: form.serialize(),
+            success: function (response) {
+                if (response.success) {
+                    $('#category-row-' + deleteCategoryId).remove(); // Elimina la fila del DOM
+                    alert(response.message || "Categoría eliminada exitosamente.");
+                } else {
+                    alert(response.message || "No se pudo eliminar la categoría.");
+                }
+            },
+            error: function () {
+                alert("Error al eliminar la categoría.");
+            }
+        });
+    }
+});
         // Función para agregar productos al carrito
         $('.add-to-cart').click(function () {
             var productId = $(this).data('product-id');
@@ -566,8 +598,5 @@ h5 {
         });
     });
 </script>
-
-
-
 
 {% endblock %}

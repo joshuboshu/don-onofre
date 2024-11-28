@@ -12,9 +12,15 @@
             <td>{{ categoria.id }}</td>
             <td>{{ categoria.nombre }}</td>
             <td>
-                <button class="btn btn-danger delete-category-item" data-category-id="{{ categoria.id }}">
-                    <i class="fas fa-trash-alt"></i> Eliminar
-                </button>
+                <form id="delete-category-form-{{ categoria.id }}" 
+                      action="{% url 'eliminar_categoria' categoria_id=categoria.id %}" 
+                      method="POST" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="button" class="btn btn-danger delete-category-item" 
+                            data-category-id="{{ categoria.id }}">
+                        <i class="fas fa-trash-alt"></i> Eliminar
+                    </button>
+                </form>
             </td>
         </tr>
         {% endfor %}
