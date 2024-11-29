@@ -7,145 +7,147 @@
 <link rel="stylesheet" href="{% static 'proyectowebapp/css/tienda.css' %}">
 <style>
     /* Colores base y tipografía */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f9fc;
-    color: #343a40;
-}
-
-h5 {
-    font-weight: bold;
-    color: #343a40;
-}
-
-/* Tarjetas de Productos */
-.card {
-    border: 0;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.card:hover {
-    transform: scale(1.03);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-}
-
-.card-img-top {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    height: 200px;
-    object-fit: cover;
-}
-
-.card-title.prod {
-    color: #007bff;
-}
-
-.card-text {
-    color: #28a745;
-    font-weight: 500;
-}
-
-/* Botones */
-.btn {
-    border-radius: 8px;
-    padding: 10px 16px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    border: 0;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-}
-
-.btn-success {
-    background-color: #28a745;
-    border: 0;
-}
-
-.btn-success:hover {
-    background-color: #218838;
-    transform: scale(1.05);
-}
-
-.btn-danger {
-    background-color: #dc3545;
-    border: 0;
-}
-
-.btn-danger:hover {
-    background-color: #c82333;
-    transform: scale(1.05);
-}
-
-/* Modal */
-.modal-content {
-    border-radius: 12px;
-    border: none;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.modal-header {
-    background-color: #007bff;
-    color: #fff;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-}
-
-.modal-body {
-    background-color: #f8f9fa;
-    padding: 30px;
-}
-
-/* Formulario */
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-control {
-    border-radius: 5px;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.form-control:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-}
-
-/* Iconos de Carrito y Mensajes */
-.alert-warning {
-    display: flex;
-    align-items: center;
-}
-
-.alert-warning i {
-    margin-right: 8px;
-}
-
-/* Animaciones */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f8f9fc;
+        color: #343a40;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+
+    h5 {
+        font-weight: bold;
+        color: #343a40;
     }
-}
 
-.modal-content, .card, .btn {
-    animation: fadeIn 0.5s ease-in-out;
-}
+    /* Tarjetas de Productos */
+    .card {
+        border: 0;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
 
+    .card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-img-top {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card-title.prod {
+        color: #007bff;
+    }
+
+    .card-text {
+        color: #28a745;
+        font-weight: 500;
+    }
+
+    /* Botones */
+    .btn {
+        border-radius: 8px;
+        padding: 10px 16px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: 0;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border: 0;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: 0;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        transform: scale(1.05);
+    }
+
+    /* Modal */
+    .modal-content {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+        background-color: #007bff;
+        color: #fff;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+
+    .modal-body {
+        background-color: #f8f9fa;
+        padding: 30px;
+    }
+
+    /* Formulario */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        border-radius: 5px;
+        padding: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    }
+
+    /* Iconos de Carrito y Mensajes */
+    .alert-warning {
+        display: flex;
+        align-items: center;
+    }
+
+    .alert-warning i {
+        margin-right: 8px;
+    }
+
+    /* Animaciones */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .modal-content,
+    .card,
+    .btn {
+        animation: fadeIn 0.5s ease-in-out;
+    }
 </style>
 {% endblock %}
 
@@ -164,11 +166,12 @@ h5 {
                             <p class="card-text mb-4">{{ producto.precio }} ₲</p>
                             <div class="mt-auto text-center">
                                 {% if not request.user.is_superuser %}
-                                    {% if request.user.is_authenticated %}
-                                    <button type="button" class="btn btn-success add-to-cart" data-product-id="{{ producto.id }}">
-                                        <i class="fas fa-cart-plus me-2"></i>Agregar al carrito
-                                    </button>
-                                    {% endif %}
+                                {% if request.user.is_authenticated %}
+                                <button type="button" class="btn btn-success add-to-cart"
+                                    data-product-id="{{ producto.id }}">
+                                    <i class="fas fa-cart-plus me-2"></i>Agregar al carrito
+                                </button>
+                                {% endif %}
                                 {% endif %}
 
                                 {% has_perm "tienda.delete_producto" user as can_delete_producto %}
@@ -222,7 +225,7 @@ h5 {
                 {% else %}
                 <div class="alert alert-warning" role="alert">
                     <i class="fas fa-exclamation-triangle me-2"></i>Iniciar sesión para ver el carrito.
-                </div>                  
+                </div>
                 {% endif %}
             </div>
             {% endif %}
@@ -445,52 +448,84 @@ h5 {
             });
         }
 
-        
+        // Función para mostrar un toast de mensaje
+        const showToast = (message, color = "#4caf50") => {
+            const toast = document.createElement("div");
+            toast.innerText = message;
+            toast.style.position = "fixed";
+            toast.style.bottom = "20px";
+            toast.style.right = "20px";
+            toast.style.padding = "15px 20px";
+            toast.style.backgroundColor = color;
+            toast.style.color = "#fff";
+            toast.style.fontSize = "1rem";
+            toast.style.borderRadius = "5px";
+            toast.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.2)";
+            toast.style.opacity = "0";
+            toast.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+            toast.style.transform = "translateY(20px)";
+            toast.style.zIndex = "999";
+            document.body.appendChild(toast);
+
+            // Mostrar el toast
+            setTimeout(() => {
+                toast.style.opacity = "1";
+                toast.style.transform = "translateY(0)";
+            }, 100);
+
+            // Ocultar el toast después de 3 segundos
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transform = "translateY(20px)";
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        };
+
         var deleteCategoryId = null;
 
-// Cargar lista de categorías al abrir el modal
-$('#delete-category-btn').click(function () {
-    $.ajax({
-        url: "{% url 'listar_categorias' %}",
-        method: "GET",
-        success: function (response) {
-            $('#category-list').html(response.html); // Reemplaza el contenido de la tabla
-            $('#delete-category-modal').modal('show');
-        },
-        error: function () {
-            alert("Error al cargar la lista de categorías.");
-        }
-    });
-});
-
-// Manejar la eliminación de una categoría
-$(document).on('click', '.delete-category-item', function () {
-    deleteCategoryId = $(this).data('category-id');
-    var form = $('#delete-category-form-' + deleteCategoryId);
-
-    if (confirm("¿Estás seguro de que deseas eliminar esta categoría?")) {
-        $.ajax({
-            url: form.attr('action'),
-            method: 'POST',
-            data: form.serialize(),
-            success: function (response) {
-                if (response.success) {
-                    $('#category-row-' + deleteCategoryId).remove(); // Elimina la fila del DOM
-                    alert(response.message || "Categoría eliminada exitosamente.");
-                } else {
-                    alert(response.message || "No se pudo eliminar la categoría.");
+        // Cargar lista de categorías al abrir el modal
+        $('#delete-category-btn').click(function () {
+            $.ajax({
+                url: "{% url 'listar_categorias' %}",
+                method: "GET",
+                success: function (response) {
+                    $('#category-list').html(response.html); // Reemplaza el contenido de la tabla
+                    $('#delete-category-modal').modal('show');
+                },
+                error: function () {
+                    alert("Error al cargar la lista de categorías.");
                 }
-            },
-            error: function () {
-                alert("Error al eliminar la categoría.");
+            });
+        });
+
+        // Manejar la eliminación de una categoría
+        $(document).on('click', '.delete-category-item', function () {
+            deleteCategoryId = $(this).data('category-id');
+            var form = $('#delete-category-form-' + deleteCategoryId);
+
+            if (confirm("¿Estás seguro de que deseas eliminar esta categoría?")) {
+                $.ajax({
+                    url: form.attr('action'),
+                    method: 'POST',
+                    data: form.serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            $('#category-row-' + deleteCategoryId).remove(); // Elimina la fila del DOM
+                            showToast("Categoria eliminada exitosamente.", "#ff4d4d");
+                        } else {
+                            alert(response.message || "No se pudo eliminar la categoría.");
+                        }
+                    },
+                    error: function () {
+                        alert("Error al eliminar la categoría.");
+                    }
+                });
             }
         });
-    }
-});
         // Función para agregar productos al carrito
         $('.add-to-cart').click(function () {
             var productId = $(this).data('product-id');
-            
+
             $.ajax({
                 url: "{% url 'carro:update_cart' %}",
                 method: "POST",
@@ -503,6 +538,7 @@ $(document).on('click', '.delete-category-item', function () {
                     if (response.success) {
                         // Actualiza el contenido del carrito con el HTML recibido
                         $('#cart-widget').html(response.cart_html);
+                        showToast("Producto agregado exitosamente.");
                     } else {
                         alert("Error: " + (response.error || "No se pudo agregar el producto."));
                     }
@@ -512,7 +548,7 @@ $(document).on('click', '.delete-category-item', function () {
                 }
             });
         });
-        
+
         // Funciones para agregar productos y categorías
         $('#add-product-btn').click(function () {
             loadModalContent("{% url 'agregar_producto' %}", '#add-product-modal', '#add-product-form-container');
@@ -533,7 +569,8 @@ $(document).on('click', '.delete-category-item', function () {
                 success: function (response) {
                     $('#add-product-modal').modal('hide');
                     $('#product-added-confirmation-modal').modal('show');
-                    location.reload();
+                    // location.reload();
+                    showToast("Producto guardado exitosamente.");
                 },
                 error: function () {
                     alert("Hubo un error al guardar el producto.");
@@ -563,9 +600,10 @@ $(document).on('click', '.delete-category-item', function () {
                         $('#delete-success-modal').modal('show');
 
                         // Recargar la página inmediatamente
-                        location.reload();
-
+                        // location.reload();
                         deleteProductId = null;
+                        showToast("Producto eliminado exitosamente.", "#ff4d4d");
+
                     },
                     error: function () {
                         alert("Hubo un error al eliminar el producto.");
@@ -589,7 +627,8 @@ $(document).on('click', '.delete-category-item', function () {
                     $('#category-added-confirmation-modal').modal('show');
 
                     // Recargar la página inmediatamente
-                    location.reload();
+                    // location.reload();
+                    showToast("Categoria agregada exitosamente.");
                 },
                 error: function () {
                     alert("Hubo un error al guardar la categoría.");
