@@ -199,26 +199,6 @@
         </div>
 
         <div class="col-lg-3 mt-4 mt-lg-0">
-            {% has_perm "tienda.add_producto" user as can_add_producto %}
-            {% if can_add_producto %}
-            <button class="btn btn-success w-100 mb-2" id="add-product-btn">
-                <i class="fas fa-plus me-2"></i>Agregar Producto
-            </button>
-            {% endif %}
-            {% has_perm "tienda.add_categoriaprod" user as can_add_categoriaprod %}
-            {% if can_add_categoriaprod %}
-            <button class="btn btn-primary w-100" id="add-category-btn">
-                <i class="fas fa-tag me-2"></i>Agregar Categoría
-            </button>
-            {% endif %}
-            {% has_perm "tienda.delete_categoriaprod" user as can_delete_categoriaprod %}
-            {% if can_delete_categoriaprod %}
-            <button class="btn btn-danger w-100 mt-2" id="delete-category-btn">
-                <i class="fas fa-trash-alt me-2"></i>Eliminar Categoría
-            </button>
-            {% endif %}
-
-            {% if not request.user.is_superuser %}
             <div class="card-body" id="cart-widget">
                 {% if request.user.is_authenticated %}
                 {% include "carro/widget.html" %}
@@ -228,7 +208,6 @@
                 </div>
                 {% endif %}
             </div>
-            {% endif %}
         </div>
     </div>
 </div>
