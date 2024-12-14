@@ -154,6 +154,12 @@
 <div class="container py-5">
     <h1 class="text-primary mb-4">Nuestros Productos</h1>
     <div class="row">
+        <div class="col-lg-3 mt-4 mt-lg-0">
+            <div class="card-body" id="cart-widget">
+                {% include "carro/widget.html" %}
+            </div>
+        </div>
+
         <div class="col-lg-9">
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                 {% for producto in productos %}
@@ -182,17 +188,6 @@
             </div>
         </div>
 
-        <div class="col-lg-3 mt-4 mt-lg-0">
-            <div class="card-body" id="cart-widget">
-                {% if request.user.is_authenticated %}
-                {% include "carro/widget.html" %}
-                {% else %}
-                <div class="alert alert-warning" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i>Iniciar sesión para ver el carrito.
-                </div>
-                {% endif %}
-            </div>
-        </div>
     </div>
 </div>
 
@@ -248,42 +243,6 @@
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         };
-
-        var deleteCategoryId = null;
-
-        // Función para agregar productos al carrito
-        $('.add-to-cart').click(function () {
-            var productId = $(this).data('product-id');
-
-            $.ajax({
-                url: "{% url 'carro:update_cart' %}",
-                method: "POST",
-                data: {
-                    'product_id': productId,
-                    'action': 'add',
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function (response) {
-                    if (response.success) {
-                        // Actualiza el contenido del carrito con el HTML recibido
-                        $('#cart-widget').html(response.cart_html);
-                        showToast("Producto agregado exitosamente.");
-                    } else {
-                        alert("Error: " + (response.error || "No se pudo agregar el producto."));
-                    }
-                },
-                error: function () {
-                    alert("Hubo un error al agregar el producto al carrito.");
-                }
-            });
-        });
-        var deleteProductId = null;
-
-        // Mostrar el modal de confirmación de eliminación
-        $(document).on('click', '.delete-product-btn', function () {
-            deleteProductId = $(this).data('product-id');
-            $('#delete-confirmation-modal').modal('show');
-        });
 
     });
 </script>
