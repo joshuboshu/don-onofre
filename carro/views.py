@@ -1,16 +1,22 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from .carro import Carro
 from tienda.models import Producto
 from django.template.loader import render_to_string
 
-# Create your views here.
 def agregar_producto(request, producto_id):
-    carro = Carro(request)
-    producto = Producto.objects.get(id=producto_id)
-    carro.agregar(producto=producto)
-    return redirect("Tienda")
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            return JsonResponse({"success": False, "message": "Debes iniciar sesión para agregar productos al carrito."})
+        
+        producto = get_object_or_404(Producto, id=producto_id)
+        carro = Carro(request)
+        carro.agregar(producto)
+        return JsonResponse({"success": True, "message": "Producto agregado al carrito."})
+    
+    return JsonResponse({"success": False, "message": "Método no permitido."})
+
 
 def eliminar_producto(request, producto_id):
     carro = Carro(request)
@@ -18,13 +24,15 @@ def eliminar_producto(request, producto_id):
     carro.eliminar(producto=producto)
     return redirect("Tienda")
 
+
 def restar_producto(request, producto_id):
     carro = Carro(request)
     producto = Producto.objects.get(id=producto_id)
     carro.restar_producto(producto=producto)
     return redirect("Tienda")
 
-def limpiar_carro(request, producto_id):
+
+def limpiar_carro(request):
     carro = Carro(request)
     carro.limpiar_carro()
     return redirect("Tienda")

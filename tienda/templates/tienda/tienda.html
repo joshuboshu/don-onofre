@@ -151,6 +151,12 @@
 {% endblock %}
 
 {% block content %}
+<!-- Enlace al carrito en la parte superior de la página -->
+<div class="container py-2 text-end">
+    <a href="{% url 'carro:cart_view' %}" class="btn btn-primary">
+        <i class="fas fa-shopping-cart"></i> Ver Carrito
+    </a>
+</div>
 <div class="container py-5">
     <h1 class="text-primary mb-4">Nuestros Productos</h1>
     <div class="row">
@@ -195,56 +201,71 @@
 
 {% block extra_js %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
+<<script>
     $(document).ready(function () {
-        function loadModalContent(url, modalSelector, containerSelector) {
-            $.ajax({
-                url: url,
-                method: "GET",
-                success: function (data) {
-                    $(containerSelector).html(data);
-                    $(modalSelector).modal('show');
-                },
-                error: function () {
-                    alert("Hubo un error al cargar el formulario.");
-                }
-            });
-        }
+    // Función para mostrar un toast de mensaje
+    const showToast = (message, color = "#4caf50") => {
+        const toast = document.createElement("div");
+        toast.innerText = message;
+        toast.style.position = "fixed";
+        toast.style.bottom = "20px";
+        toast.style.right = "20px";
+        toast.style.padding = "15px 20px";
+        toast.style.backgroundColor = color;
+        toast.style.color = "#fff";
+        toast.style.fontSize = "1rem";
+        toast.style.borderRadius = "5px";
+        toast.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.2)";
+        toast.style.opacity = "0";
+        toast.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+        toast.style.transform = "translateY(20px)";
+        toast.style.zIndex = "999";
+        document.body.appendChild(toast);
 
-        // Función para mostrar un toast de mensaje
-        const showToast = (message, color = "#4caf50") => {
-            const toast = document.createElement("div");
-            toast.innerText = message;
-            toast.style.position = "fixed";
-            toast.style.bottom = "20px";
-            toast.style.right = "20px";
-            toast.style.padding = "15px 20px";
-            toast.style.backgroundColor = color;
-            toast.style.color = "#fff";
-            toast.style.fontSize = "1rem";
-            toast.style.borderRadius = "5px";
-            toast.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.2)";
+        // Mostrar el toast
+        setTimeout(() => {
+            toast.style.opacity = "1";
+            toast.style.transform = "translateY(0)";
+        }, 100);
+
+        // Ocultar el toast después de 3 segundos
+        setTimeout(() => {
             toast.style.opacity = "0";
-            toast.style.transition = "opacity 0.3s ease, transform 0.3s ease";
             toast.style.transform = "translateY(20px)";
-            toast.style.zIndex = "999";
-            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    };
 
-            // Mostrar el toast
-            setTimeout(() => {
-                toast.style.opacity = "1";
-                toast.style.transform = "translateY(0)";
-            }, 100);
+    // Manejo del clic en "Agregar al carrito"
+    $(".add-to-cart").on("click", function () {
+        const productId = $(this).data("product-id");
 
-            // Ocultar el toast después de 3 segundos
-            setTimeout(() => {
-                toast.style.opacity = "0";
-                toast.style.transform = "translateY(20px)";
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        };
+        $.ajax({
+            url: "{% url 'carro:agregar' 0 %}".replace("0", productId),
+            type: "POST",
+            data: {
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+            },
+            success: function (response) {
+                if (response.success) {
+                    // Mostrar un mensaje de éxito
+                    showToast(response.message, "#4caf50");
 
+                    // Actualizar el widget del carrito (opcional)
+                    $("#cart-widget").load(location.href + " #cart-widget");
+                } else {
+                    // Mostrar un mensaje de error
+                    showToast(response.message, "#f44336");
+                }
+            },
+            error: function () {
+                // Manejo de errores en la solicitud AJAX
+                showToast("No se pudo agregar el producto al carrito.", "#f44336");
+            }
+        });
     });
+});
+
 </script>
 
 {% endblock %}
