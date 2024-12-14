@@ -97,10 +97,10 @@
                     <div class="col-md-4 text-md-end animate__animated animate__fadeInRight">
                         {% if user.is_authenticated %}
                             <span class="me-3 fs-5">Bienvenido, <strong>{{ user.username }}</strong></span>
-                            <a href="{% url 'account_logout' %}" class="btn btn-outline-light">Cerrar sesión</a>
+                            <a href="{% url 'cerrar_sesion' %}" class="btn btn-outline-light">Cerrar sesión</a>
                         {% else %}
-                            <a href="{% url 'account_login' %}" class="btn btn-outline-light me-2">Login</a>
-                            <a href="{% url 'account_signup' %}" class="btn btn-light">Registrarse</a>
+                            <a href="{% url 'logear' %}" class="btn btn-outline-light me-2">Login</a>
+                            <a href="{% url 'Autenticacion' %}" class="btn btn-light">Registrarse</a>
                         {% endif %}
                     
                 </div>
