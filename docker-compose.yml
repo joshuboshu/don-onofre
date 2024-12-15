@@ -10,7 +10,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
     ports:
-      - "5435:5432"  # Puerto mapeado de PostgreSQL (host:container)
+      - "5436:5432"  # Puerto mapeado de PostgreSQL (host:container)
 
   web:
     build: .
