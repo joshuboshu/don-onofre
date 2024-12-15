@@ -20,7 +20,6 @@ ALLOWED_HOSTS = ['*']
 BASE_URL = 'http://localhost:8003'
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -85,7 +84,6 @@ TEMPLATES = [
 # Aplicación WSGI para desplegar el proyecto
 WSGI_APPLICATION = 'proyectoweb.wsgi.app'
 
-
 # Configuración de la base de datos
 DATABASES = {
     'default': {
@@ -107,35 +105,24 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'es-es'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 SITE_ID = 1
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / "static",  # Asegúrate de que este directorio existe en tu proyecto
-]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [BASE_DIR / "static"]  # Asegúrate de que este directorio existe
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_IGNORE_PATTERNS = [
     "proyectowebapp/vendor/font-awesome/less/*.less",  # Ignorar archivos .less de FontAwesome
 ]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+MEDIA_ROOT = BASE_DIR / 'media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -180,9 +167,6 @@ SESSION_COOKIE_SECURE = True  # Solo envía cookies en conexiones HTTPS
 CSRF_COOKIE_SECURE = True     # Asegura la cookie de CSRF solo para HTTPS
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3  # Expiración de enlaces de confirmación de email
 
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-CRISPY_TEMPLATE_PACK = "bootstrap5"
-
 # Configuración de allauth para usar solo nombre de usuario
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"  # Autenticación solo con nombre de usuario
 ACCOUNT_USERNAME_REQUIRED = True  # Requiere nombre de usuario
@@ -190,7 +174,7 @@ ACCOUNT_EMAIL_REQUIRED = True  # requiere correo electrónico
 
 ACCOUNT_LOGOUT_ON_GET = True
 
-ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5  # Límite de intentos de inicio de sesión antes de bloquear temporalmente
-ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300  # Tiempo de espera en segundos antes de reintentar
-
-
+# Configuración de rate-limiting para intentos fallidos de inicio de sesión
+ACCOUNT_RATE_LIMITS = {
+    'login_failed': '5/m',  # Límite de 5 intentos fallidos por minuto
+}
