@@ -1,6 +1,6 @@
 :root {
-  --primary-color: #007bff;
-  --secondary-color: #6c757d;
+  --primary-color: #a52a2a;
+  --secondary-color: #8b4513;
   --success-color: #28a745;
   --info-color: #17a2b8;
   --warning-color: #ffc107;
@@ -10,8 +10,8 @@
 }
 
 body {
-  font-family: 'Raleway', sans-serif;
-  background: linear-gradient(rgba(47, 23, 15, 0.65), rgba(47, 23, 15, 0.65)), url("../img/bg_main.jpg");
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(rgba(165, 42, 42, 0.65), rgba(165, 42, 42, 0.65)), url("../img/bg_main.jpg");
   background-attachment: fixed;
   background-position: center;
   background-size: cover;
@@ -20,7 +20,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Lora', serif;
+  font-family: 'Playfair Display', serif;
   font-weight: 700;
 }
 
@@ -28,7 +28,6 @@ h1, h2, h3, h4, h5, h6 {
   background-color: rgba(255, 255, 255, 0.1);
   color: #ffffff;
 }
-
 
 .text-faded {
   color: rgba(255, 255, 255, 0.7);
@@ -39,7 +38,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 5rem;
   text-transform: uppercase;
   line-height: 1;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Playfair Display', serif;
 }
 
 .site-heading .site-heading-upper {
@@ -81,8 +80,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #mainNav {
-  background-color: rgba(24, 64, 8, 0.9);
-  font-family: 'Raleway';
+  background-color: rgba(165, 42, 42, 0.9);
+  font-family: 'Poppins', sans-serif;
 }
 
 #mainNav .navbar-brand {
@@ -100,13 +99,13 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (min-width: 992px) {
   #mainNav .navbar-nav .nav-item .nav-link {
-    font-size: 0.9rem;
+      font-size: 0.9rem;
   }
   #mainNav .navbar-nav .nav-item .nav-link:hover {
-    color: rgba(255, 255, 255, 0.4);
+      color: rgba(255, 255, 255, 0.4);
   }
   #mainNav .navbar-nav .nav-item.active .nav-link:hover {
-    color: #ffffff;
+      color: #ffffff;
   }
 }
 
@@ -122,21 +121,21 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (min-width: 992px) {
   .intro .intro-img {
-    width: 75%;
-    float: right;
+      width: 75%;
+      float: right;
   }
   .intro .intro-text {
-    left: 0;
-    width: 60%;
-    margin-top: 3rem;
-    position: absolute;
-    background-color: rgba(24, 64, 8, 0.85);
+      left: 0;
+      width: 60%;
+      margin-top: 3rem;
+      position: absolute;
+      background-color: rgba(165, 42, 42, 0.85);
   }
   .intro .intro-text .intro-button {
-    width: 100%;
-    left: 0;
-    position: absolute;
-    bottom: -2rem;
+      width: 100%;
+      left: 0;
+      position: absolute;
+      bottom: -2rem;
   }
 }
 
@@ -150,7 +149,7 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   padding: 3rem;
   margin: 0.5rem;
-  background-color: rgba(24, 64, 8, 0.85);
+  background-color: rgba(165, 42, 42, 0.85);
 }
 
 .cta .cta-inner:before {
@@ -198,7 +197,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .footer {
-   background-color: rgba(24, 64, 8, 0.8);
+ background-color: rgba(165, 42, 42, 0.8);
 }
 
 .btn {
@@ -231,7 +230,7 @@ a.link:hover {
 }
 
 .section-content {
-  font-family: 'Lora' !important;
+  font-family: 'Playfair Display', serif !important;
   font-size: 16px !important;
   font-weight: 400 !important;
   line-height: 28px !important;
@@ -244,7 +243,7 @@ ul.errorlist {
 }
 
 .contenedorFormulario {
-  background-color: rgba(24, 64, 8, 0.8);
+  background-color: rgba(165, 42, 42, 0.8);
   max-width: 600px;
   margin: 2rem auto;
   border-radius: 0.5rem;
@@ -277,7 +276,7 @@ ul.errorlist {
 
 .hero-section {
   padding: 5rem 0;
-  background-color: rgba(24, 64, 8, 0.7);
+  background-color: rgba(165, 42, 42, 0.7);
 }
 
 .features-section {
@@ -337,7 +336,7 @@ ul.errorlist {
 
 .form-control:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(165, 42, 42, 0.25);
 }
 
 /* Estilos para la sección de blog */
@@ -401,7 +400,7 @@ ul.errorlist {
 }
 
 .form-group textarea {
-  width: 205%;
+  width: 100%;
   padding: 0.375rem 0.75rem;
   font-size: 1rem;
   line-height: 1.5;
@@ -420,7 +419,7 @@ ul.errorlist {
   background-color: #fff;
   border-color: #80bdff;
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(165, 42, 42, 0.25);
 }
 
 .invalid-feedback {
@@ -434,20 +433,17 @@ ul.errorlist {
 /* Mejoras para dispositivos móviles */
 @media (max-width: 768px) {
   .site-heading .site-heading-lower {
-    font-size: 3rem;
+      font-size: 3rem;
   }
 
   .intro .intro-text {
-    width: 100%;
-    left: 0;
-    right: 0;
+      width: 100%;
+      left: 0;
+      right: 0;
   }
 
   .cta .cta-inner {
-    margin: 0;
-  }
-
-  .form-group textarea {
-    width: 100%;
+      margin: 0;
   }
 }
+
