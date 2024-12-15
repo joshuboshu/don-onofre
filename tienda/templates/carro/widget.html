@@ -5,10 +5,16 @@
     <h2 class="categories-title">Categorías</h2>
     {% if categorias %}
         <ul class="categories-list">
+            <!-- Añadir enlace para mostrar todos los productos -->
+            <li class="category-item">
+                <a href="{% url 'Tienda' %}" class="category-link {% if not categoria_actual %}active{% endif %}">
+                    <span class="category-name">Todas las categorías</span>
+                </a>
+            </li>
             {% for categoria in categorias %}
                 <li class="category-item">
-                    <!-- Enlace a la vista de productos de esta categoría -->
-                    <a href="{% url 'productos_por_categoria' categoria.id %}" class="category-link">
+                    <a href="{% url 'productos_por_categoria' categoria.id %}" 
+                       class="category-link {% if categoria_actual.id == categoria.id %}active{% endif %}">
                         <span class="category-name">{{ categoria.nombre }}</span>
                     </a>
                 </li>
@@ -16,7 +22,6 @@
         </ul>
     {% endif %}
 </div>
-
 
 <!-- Estilos -->
 <style>

@@ -11,7 +11,14 @@ def tienda(request):
 
 
 def productos_por_categoria(request, categoria_id):
-    categoria = CategoriaProd.objects.get(id=categoria_id)
-    productos = Producto.objects.filter(categorias=categoria)
-    carro = Carro(request)  # Estado actual del carrito
-    return render(request, "tienda/tienda.html", {"productos": productos, "categoria": categoria, "carro": carro})
+    categorias = CategoriaProd.objects.all()  # Obtener todas las categorías
+    categoria_actual = CategoriaProd.objects.get(id=categoria_id)
+    productos = Producto.objects.filter(categorias=categoria_actual)
+    carro = Carro(request)
+    
+    return render(request, "tienda/tienda.html", {
+        "productos": productos,
+        "categorias": categorias,  # Pasamos todas las categorías
+        "categoria_actual": categoria_actual,  # Categoría seleccionada actualmente
+        "carro": carro
+    })
