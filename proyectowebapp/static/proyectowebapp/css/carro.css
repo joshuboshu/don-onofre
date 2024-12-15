@@ -25,3 +25,9 @@
 .badge {
     font-size: 0.8rem;
 }
+
+.cart-image {
+    width: 50px; /* Ancho específico */
+    height: 50px; /* Altura específica */
+    object-fit: cover; /* Asegura que la imagen no se distorsione */
+}
