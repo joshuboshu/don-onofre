@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Producto, CategoriaProd
 from carro.carro import Carro
+from django.http import JsonResponse
 
 def tienda(request):
     productos = Producto.objects.all()

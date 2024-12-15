@@ -7,34 +7,16 @@
         <ul class="categories-list">
             {% for categoria in categorias %}
                 <li class="category-item">
-                    <!-- Detalles para mostrar los productos de la categoría -->
-                    <details class="category-details">
-                        <summary class="category-summary">
-                            <span class="category-icon">
-                                <i class="fas fa-th-list"></i> <!-- Cambié el ícono por uno de lista -->
-                            </span>
-                            <span class="category-name">{{ categoria.nombre }}</span>
-                            <span class="category-arrow">
-                                <i class="fas fa-chevron-down"></i>
-                            </span>
-                        </summary>
-                        <!-- Productos de la categoría -->
-                        <ul class="product-list">
-                            {% for producto in categoria.producto_set.all %}
-                                <li class="product-item">
-                                    <a href="{% url 'productos_por_categoria' categoria.id %}" class="product-link">
-                                        <span class="product-name">{{ producto.nombre }}</span>
-                                        <span class="product-price">{{ producto.precio }} ₲</span>
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </details>
+                    <!-- Enlace a la vista de productos de esta categoría -->
+                    <a href="{% url 'productos_por_categoria' categoria.id %}" class="category-link">
+                        <span class="category-name">{{ categoria.nombre }}</span>
+                    </a>
                 </li>
             {% endfor %}
         </ul>
     {% endif %}
 </div>
+
 
 <!-- Estilos -->
 <style>
