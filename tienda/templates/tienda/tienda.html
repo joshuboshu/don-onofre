@@ -1,6 +1,5 @@
 {% extends "proyectowebapp/base.html" %}
 {% load static %}
-{% load rules %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -152,9 +151,21 @@
 {% endblock %}
 
 {% block content %}
+<!-- Enlace al carrito en la parte superior de la página -->
+<div class="container py-2 text-end">
+    <a href="{% url 'carro:cart_view' %}" class="btn btn-primary">
+        <i class="fas fa-shopping-cart"></i> Ver Carrito
+    </a>
+</div>
 <div class="container py-5">
     <h1 class="text-primary mb-4">Nuestros Productos</h1>
     <div class="row">
+        <div class="col-lg-3 mt-4 mt-lg-0">
+            <div class="card-body" id="cart-widget">
+                {% include "carro/widget.html" %}
+            </div>
+        </div>
+
         <div class="col-lg-9">
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                 {% for producto in productos %}
@@ -183,17 +194,6 @@
             </div>
         </div>
 
-        <div class="col-lg-3 mt-4 mt-lg-0">
-            <div class="card-body" id="cart-widget">
-                {% if request.user.is_authenticated %}
-                {% include "carro/widget.html" %}
-                {% else %}
-                <div class="alert alert-warning" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i>Iniciar sesión para ver el carrito.
-                </div>
-                {% endif %}
-            </div>
-        </div>
     </div>
 </div>
 
@@ -203,20 +203,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        function loadModalContent(url, modalSelector, containerSelector) {
-            $.ajax({
-                url: url,
-                method: "GET",
-                success: function (data) {
-                    $(containerSelector).html(data);
-                    $(modalSelector).modal('show');
-                },
-                error: function () {
-                    alert("Hubo un error al cargar el formulario.");
-                }
-            });
-        }
-
         // Función para mostrar un toast de mensaje
         const showToast = (message, color = "#4caf50") => {
             const toast = document.createElement("div");
@@ -250,112 +236,36 @@
             }, 3000);
         };
 
-        var deleteCategoryId = null;
-
-        // Cargar lista de categorías al abrir el modal
-        $('#delete-category-btn').click(function () {
-            $.ajax({
-                url: "{% url 'listar_categorias' %}",
-                method: "GET",
-                success: function (response) {
-                    $('#category-list').html(response.html); // Reemplaza el contenido de la tabla
-                    $('#delete-category-modal').modal('show');
-                },
-                error: function () {
-                    alert("Error al cargar la lista de categorías.");
-                }
-            });
-        });
-
-        // Manejar la eliminación de una categoría
-        $(document).on('click', '.delete-category-item', function () {
-            deleteCategoryId = $(this).data('category-id');
-            var form = $('#delete-category-form-' + deleteCategoryId);
-
-            if (confirm("¿Estás seguro de que deseas eliminar esta categoría?")) {
-                $.ajax({
-                    url: form.attr('action'),
-                    method: 'POST',
-                    data: form.serialize(),
-                    success: function (response) {
-                        if (response.success) {
-                            $('#category-row-' + deleteCategoryId).remove(); // Elimina la fila del DOM
-                            showToast("Categoria eliminada exitosamente.", "#ff4d4d");
-                        } else {
-                            alert(response.message || "No se pudo eliminar la categoría.");
-                        }
-                    },
-                    error: function () {
-                        alert("Error al eliminar la categoría.");
-                    }
-                });
-            }
-        });
-        // Función para agregar productos al carrito
-        $('.add-to-cart').click(function () {
-            var productId = $(this).data('product-id');
+        // Manejo del clic en "Agregar al carrito"
+        $(".add-to-cart").on("click", function () {
+            const productId = $(this).data("product-id");
 
             $.ajax({
-                url: "{% url 'carro:update_cart' %}",
-                method: "POST",
+                url: "{% url 'carro:agregar' 0 %}".replace("0", productId),
+                type: "POST",
                 data: {
-                    'product_id': productId,
-                    'action': 'add',
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
                 },
                 success: function (response) {
                     if (response.success) {
-                        // Actualiza el contenido del carrito con el HTML recibido
-                        $('#cart-widget').html(response.cart_html);
-                        showToast("Producto agregado exitosamente.");
+                        // Mostrar un mensaje de éxito
+                        showToast(response.message, "#4caf50");
+
+                        // Solo actualizar el widget del carrito
+                        $("#cart-widget").load(location.href + " #cart-widget > *");
                     } else {
-                        alert("Error: " + (response.error || "No se pudo agregar el producto."));
+                        // Mostrar un mensaje de error
+                        showToast(response.message, "#f44336");
                     }
                 },
                 error: function () {
-                    alert("Hubo un error al agregar el producto al carrito.");
+                    // Manejo de errores en la solicitud AJAX
+                    showToast("No se pudo agregar el producto al carrito.", "#f44336");
                 }
             });
         });
-
-        // Funciones para agregar productos y categorías
-        $('#add-product-btn').click(function () {
-            loadModalContent("{% url 'agregar_producto' %}", '#add-product-modal', '#add-product-form-container');
-        });
-
-        $('#add-category-btn').click(function () {
-            loadModalContent("{% url 'agregar_categoria' %}", '#add-category-modal', '#add-category-form-container');
-        });
-
-        $(document).on('click', '#save-product-btn', function () {
-            var formData = new FormData($('#add-product-form')[0]);
-            $.ajax({
-                url: "{% url 'agregar_producto' %}",
-                method: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    $('#add-product-modal').modal('hide');
-                    $('#product-added-confirmation-modal').modal('show');
-                    // location.reload();
-                    showToast("Producto guardado exitosamente.");
-                },
-                error: function () {
-                    alert("Hubo un error al guardar el producto.");
-                }
-            });
-        });
-
-        var deleteProductId = null;
-
-        // Mostrar el modal de confirmación de eliminación
-        $(document).on('click', '.delete-product-btn', function () {
-            deleteProductId = $(this).data('product-id');
-            $('#delete-confirmation-modal').modal('show');
-        });
-
     });
+
 </script>
 
 {% endblock %}

@@ -1,85 +1,58 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
+from django.shortcuts import render
 from .models import Producto, CategoriaProd
-from django.contrib.auth.decorators import login_required
-from rules.contrib.views import permission_required
+from carro.carro import Carro
 
 
 def tienda(request):
+    """
+    Vista que renderiza la tienda con todos los productos y categorías.
+
+    Obtiene todos los productos y categorías de la base de datos, además
+    del estado actual del carrito, y los pasa al template correspondiente.
+
+    Args:
+        request: Objeto de solicitud HTTP.
+
+    Returns:
+        Renderiza el template 'tienda/tienda.html' con los productos,
+        categorías y el estado actual del carrito.
+    """
     productos = Producto.objects.all()
     categorias = CategoriaProd.objects.all()  # Obtener todas las categorías
-    return render(request, "tienda/tienda.html", {"productos": productos, "categorias": categorias})
-
-@login_required
-@permission_required('tienda.delete_categoriaprod', raise_exception=True)
-def listar_categorias(request):
-    categorias = CategoriaProd.objects.all()
-    html = render(request, 'tienda/listar_categorias.html', {'categorias': categorias}).content.decode('utf-8')
-    return JsonResponse({'html': html})
-
-@login_required
-@permission_required('tienda.delete_categoriaprod', raise_exception=True)
-def eliminar_categoria(request, categoria_id):
-    if request.method == "POST":
-        try:
-            categoria = CategoriaProd.objects.get(id=categoria_id)
-            categoria.delete()
-            return JsonResponse({'success': True, 'message': 'Categoría eliminada correctamente.'})
-        except CategoriaProd.DoesNotExist:
-            return JsonResponse({'success': False, 'message': 'Categoría no encontrada.'})
-    return JsonResponse({'success': False, 'message': 'Método no permitido.'})
+    carro = Carro(request)  # Estado actual del carrito
+    
+    return render(request, "tienda/tienda.html", {
+        "productos": productos,
+        "categorias": categorias,
+        "carro": carro
+    })
 
 
+def productos_por_categoria(request, categoria_id):
+    """
+    Vista que renderiza los productos de una categoría específica.
 
-@login_required
-@permission_required('tienda.add_categoriaprod', raise_exception=True)
-def agregar_categoria(request):
-    if request.method == "POST":
-        nombre = request.POST.get("nombre")
-        if nombre:
-            CategoriaProd.objects.create(nombre=nombre)
-            return JsonResponse({"success": True, "message": "Categoría agregada exitosamente."})
-        return JsonResponse({"success": False, "message": "Nombre de categoría es obligatorio."})
+    Obtiene los productos que pertenecen a la categoría seleccionada por
+    el usuario, así como todas las categorías y el estado actual del carrito.
+    Luego, pasa esta información al template correspondiente.
 
-    return render(request, "tienda/agregar_categoria_form.html")
+    Args:
+        request: Objeto de solicitud HTTP.
+        categoria_id: ID de la categoría seleccionada.
 
+    Returns:
+        Renderiza el template 'tienda/tienda.html' con los productos filtrados
+        por la categoría seleccionada, todas las categorías, la categoría actual
+        y el estado actual del carrito.
+    """
+    categorias = CategoriaProd.objects.all()  # Obtener todas las categorías
+    categoria_actual = CategoriaProd.objects.get(id=categoria_id)
+    productos = Producto.objects.filter(categorias=categoria_actual)
+    carro = Carro(request)
 
-@login_required
-@permission_required('tienda.delete_producto', raise_exception=True)
-def eliminar_producto(request, producto_id):
-    if request.method == 'POST':
-        try:
-            producto = Producto.objects.get(id=producto_id)
-            producto.delete()
-            return JsonResponse({'success': True, 'message': 'Producto eliminado correctamente.'})
-        except Producto.DoesNotExist:
-            return JsonResponse({'success': False, 'message': 'Producto no encontrado.'})
-    return JsonResponse({'success': False, 'message': 'Método no permitido.'})
-
-
-
-@login_required
-@permission_required('tienda.add_producto', raise_exception=True)
-def agregar_producto(request):
-    categorias = CategoriaProd.objects.all()
-    if request.method == "POST":
-        nombre = request.POST.get("nombre")
-        categoria_id = request.POST.get("categorias")
-        precio = request.POST.get("precio")
-        disponibilidad = request.POST.get("disponibilidad") == 'on'
-        imagen = request.FILES.get("imagen")
-        
-
-        if nombre and categoria_id and precio:
-            categoria = get_object_or_404(CategoriaProd, id=categoria_id)
-            Producto.objects.create(
-                nombre=nombre,
-                categorias=categoria,
-                imagen=imagen,
-                precio=precio,
-                disponibilidad=disponibilidad,
-            )
-            return JsonResponse({"success": True, "message": "Producto agregado exitosamente."})
-        return JsonResponse({"success": False, "message": "Todos los campos son obligatorios."})
-
-    return render(request, "tienda/agregar_producto_form.html", {"categorias": categorias})
+    return render(request, "tienda/tienda.html", {
+        "productos": productos,
+        "categorias": categorias,  # Pasamos todas las categorías
+        "categoria_actual": categoria_actual,  # Categoría seleccionada actualmente
+        "carro": carro
+    })
