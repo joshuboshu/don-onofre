@@ -48,6 +48,10 @@ h1, h2, h3, h4, h5, h6 {
     background-color: var(--light-color);
 }
 
+.hero-sections {
+    background-color: var(--light-color);
+}
+
 .hero-image {
     height: 100%;
     object-fit: cover;
