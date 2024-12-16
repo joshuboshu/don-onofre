@@ -26,6 +26,7 @@
                                 {% if request.session.carro.items %}
                                     {% for key, value in request.session.carro.items %}
                                     <tr id="product-row-{{ value.producto_id }}">
+                                        <td><img src="{{ value.imagen }}" class="cart-image" alt="{{ value.nombre }}"></td>
                                         <td>{{value.nombre}}</td>
                                         <td id="quantity-{{ value.producto_id }}">{{value.cantidad}}</td>
                                         <td>

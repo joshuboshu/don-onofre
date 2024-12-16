@@ -3,78 +3,87 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="hero-section py-5 bg-light">
+<section class="hero-sections">
+    <div class="container-fluid px-0">
+        <div class="row g-0 align-items-center">
+            <div class="col-lg-6">
+                <img src="https://images.unsplash.com/photo-1587248720327-8eb72564be1e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Elegante pastelería" class="img-fluid hero-image">
+            </div>
+            <div class="col-lg-6 text-center text-lg-start p-5">
+                <h1 class="display-3 mb-4 font-serif">
+                    Dulce Delicia
+                    <span class="d-block text-primary">Artesanía en cada bocado</span>
+                </h1>
+                <p class="lead mb-4">Descubra la exquisitez de nuestros postres artesanales, elaborados con los ingredientes más finos y técnicas de vanguardia.</p>
+                <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-start gap-3">
+                    <a href="{% url 'Tienda' %}" class="btn btn-primary btn-lg">Hacer pedido</a>
+                    <a href="{% url 'Servicios' %}" class="btn btn-outline-primary btn-lg">Más información</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="featured-products py-5">
+    <div class="container">
+        <h2 class="text-center mb-5 font-serif">Nuestras Creaciones Destacadas</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow product-card">
+                    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" class="card-img-top" alt="Tarta de Chocolate Belga">
+                    <div class="card-body text-center">
+                        <h3 class="h4 mb-3 font-serif">Tarta de Chocolate Belga</h3>
+                        <p class="mb-0">Una sinfonía de chocolate negro belga, ganache de vainilla y frambuesas frescas.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow product-card">
+                    <img src="https://images.unsplash.com/photo-1612203985729-70726954388c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" class="card-img-top" alt="Macarons de la Maison">
+                    <div class="card-body text-center">
+                        <h3 class="h4 mb-3 font-serif">Macarons de la Maison</h3>
+                        <p class="mb-0">Delicados macarons en una paleta de sabores exóticos, desde lavanda hasta yuzu.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow product-card">
+                    <img src="https://images.unsplash.com/photo-1579954115545-a95591f28bfc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" class="card-img-top" alt="Croissants Artesanales">
+                    <div class="card-body text-center">
+                        <h3 class="h4 mb-3 font-serif">Croissants Artesanales</h3>
+                        <p class="mb-0">Crujientes por fuera, suaves por dentro. El desayuno perfecto para los paladares más exigentes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Philosophy Section -->
+<section class="our-philosophy py-5">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 mb-4 mb-lg-0">
-                <img class="img-fluid rounded-3 shadow-lg" src="{% static 'proyectowebapp/img/principal.jpg' %}" alt="Imagen principal de Gestión de Pedidos">
+                <div class="position-relative">
+                    <img src="https://images.unsplash.com/photo-1612203985729-70726954388c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Nuestro chef pastelero" class="img-fluid rounded shadow-lg">
+                    <div class="position-absolute bottom-0 end-0 bg-primary text-white p-3 rounded-top-left">
+                        <h4 class="h5 mb-0 font-serif">Chef Antonio Rodríguez</h4>
+                        <p class="small mb-0">Maestro Pastelero</p>
+                    </div>
+                </div>
             </div>
             <div class="col-lg-6">
-                <div class="bg-white p-5 rounded-3 shadow-lg">
-                    <h1 class="display-4 mb-4">
-                        <span class="text-primary fw-bold">Puntualidad</span>
-                        <span class="d-block" style="color: #343a40;">El mejor stock</span>
-                    </h1>
-                    <p class="lead mb-4" style="color: #57595c;">En la puerta de tu casa en menos de 48 h con el envío normal. En menos de 24 h con el envío express.</p>
-                    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
-                        <a href="{% url 'Tienda' %}" class="btn btn-primary btn-lg">Hacer pedido</a>
-                        <a href="{% url 'Servicios' %}" class="btn btn-outline-primary btn-lg">Más información</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Features Section -->
-<section class="features-section py-5">
-    <div class="container">
-        <h2 class="text-center mb-5">Nuestros Servicios</h2>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm transition-hover">
-                    <div class="card-body text-center p-4">
-                        <i class="fas fa-truck fa-3x text-primary mb-3"></i>
-                        <h3 class="h4 mb-3">Envío Rápido</h3>
-                        <p class="mb-0">Entrega garantizada en 48 horas o menos en todo el territorio nacional.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm transition-hover">
-                    <div class="card-body text-center p-4">
-                        <i class="fas fa-box-open fa-3x text-primary mb-3"></i>
-                        <h3 class="h4 mb-3">Amplio Stock</h3>
-                        <p class="mb-0">Disponemos de una gran variedad de productos listos para ser enviados.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm transition-hover">
-                    <div class="card-body text-center p-4">
-                        <i class="fas fa-headset fa-3x text-primary mb-3"></i>
-                        <h3 class="h4 mb-3">Atención al Cliente</h3>
-                        <p class="mb-0">Servicio de atención al cliente disponible 24/7 para resolver tus dudas.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Commitment Section -->
-<section class="commitment-section py-5 bg-light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="bg-primary text-white p-5 rounded-3 shadow-lg text-center">
-                    <h2 class="display-4 mb-4">
-                        <span class="fw-light">Compromiso total</span>
-                        <span class="d-block fw-bold">Garantizado</span>
-                    </h2>
-                    <p class="lead mb-4">Con más de 75 años de experiencia a nuestras espaldas, desde Gestión de Pedidos tenemos los conocimientos y herramientas necesarios para llevar cualquier objeto a la puerta de su casa con puntualidad y profesionalidad.</p>
-                    <a href="#" class="btn btn-light btn-lg">Conoce nuestra historia</a>
-                </div>
+                <h2 class="mb-4 font-serif">Nuestra Filosofía</h2>
+                <p class="lead mb-4">En Dulce Delicia, elevamos la pastelería a una forma de arte. Cada creación es una sinfonía de sabores, texturas y presentación, diseñada para deleitar todos los sentidos.</p>
+                <p class="mb-4">Nuestro compromiso con la excelencia se refleja en cada detalle:</p>
+                <ul class="list-unstyled mb-4">
+                    <li class="mb-2"><i class="fas fa-check text-primary me-2"></i>Ingredientes premium de origen local y sostenible</li>
+                    <li class="mb-2"><i class="fas fa-check text-primary me-2"></i>Técnicas artesanales combinadas con innovación culinaria</li>
+                    <li class="mb-2"><i class="fas fa-check text-primary me-2"></i>Presentaciones que son verdaderas obras de arte</li>
+                    <li><i class="fas fa-check text-primary me-2"></i>Sabores únicos que cuentan una historia en cada bocado</li>
+                </ul>
+                <a href="#" class="btn btn-outline-primary btn-lg">Descubre Nuestra Historia</a>
             </div>
         </div>
     </div>
@@ -83,45 +92,66 @@
 <!-- Testimonials Section -->
 <section class="testimonials-section py-5">
     <div class="container">
-        <h2 class="text-center mb-5">Lo que dicen nuestros clientes</h2>
+        <h2 class="text-center mb-5 font-serif">Lo que dicen nuestros clientes</h2>
         <div class="row g-4">
             <div class="col-md-4">
-                <div class="card border-0 shadow-sm h-100">
+                <div class="card border-0 shadow h-100 testimonial-card">
                     <div class="card-body p-4">
-                        <p class="mb-3">"Excelente servicio, mi pedido llegó incluso antes de lo esperado. ¡Muy recomendable!"</p>
+                        <div class="mb-3">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                        <p class="mb-3">"Los postres de Dulce Delicia trascienden lo ordinario. Cada creación es una experiencia sensorial que despierta emociones y recuerdos. Un verdadero festín para los sentidos."</p>
                         <div class="d-flex align-items-center">
-                            <img src="{% static 'proyectowebapp/img/avatar1.jpg' %}" alt="María García" class="rounded-circle me-3" width="50" height="50">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="María García" class="rounded-circle me-3" width="50" height="50">
                             <div>
-                                <h5 class="mb-0">María García</h5>
-                                <small class="text-muted">Cliente desde 2019</small>
+                                <h5 class="mb-0 font-serif">María García</h5>
+                                <small class="text-muted">Crítica Gastronómica, Revista Sabores</small>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card border-0 shadow-sm h-100">
+                <div class="card border-0 shadow h-100 testimonial-card">
                     <div class="card-body p-4">
-                        <p class="mb-3">"La atención al cliente es inmejorable. Resolvieron todas mis dudas rápidamente."</p>
+                        <div class="mb-3">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                        <p class="mb-3">"Como chef, aprecio la dedicación y la creatividad detrás de cada creación de Dulce Delicia. Sus macarons son una obra maestra de equilibrio y sabor. Una joya en el mundo de la pastelería."</p>
                         <div class="d-flex align-items-center">
-                            <img src="{% static 'proyectowebapp/img/avatar2.jpg' %}" alt="Juan Pérez" class="rounded-circle me-3" width="50" height="50">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Juan Pérez" class="rounded-circle me-3" width="50" height="50">
                             <div>
-                                <h5 class="mb-0">Juan Pérez</h5>
-                                <small class="text-muted">Cliente desde 2020</small>
+                                <h5 class="mb-0 font-serif">Juan Pérez</h5>
+                                <small class="text-muted">Chef Ejecutivo, Restaurante Estrella</small>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card border-0 shadow-sm h-100">
+                <div class="card border-0 shadow h-100 testimonial-card">
                     <div class="card-body p-4">
-                        <p class="mb-3">"Gestión de Pedidos ha simplificado enormemente nuestro proceso de compra. ¡Gracias!"</p>
+                        <div class="mb-3">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                        <p class="mb-3">"Dulce Delicia ha sido nuestra elección para eventos corporativos durante años. La calidad, presentación y servicio son impecables. Siempre impresionan a nuestros clientes más exigentes."</p>
                         <div class="d-flex align-items-center">
-                            <img src="{% static 'proyectowebapp/img/avatar3.jpg' %}" alt="Ana Martínez" class="rounded-circle me-3" width="50" height="50">
+                            <img src="https://randomuser.me/api/portraits/women/95.jpg" alt="Ana Martínez" class="rounded-circle me-3" width="50" height="50">
                             <div>
-                                <h5 class="mb-0">Ana Martínez</h5>
-                                <small class="text-muted">Cliente desde 2018</small>
+                                <h5 class="mb-0 font-serif">Ana Martínez</h5>
+                                <small class="text-muted">Directora de Eventos, Corp. Global</small>
                             </div>
                         </div>
                     </div>
@@ -131,18 +161,40 @@
     </div>
 </section>
 
-<!-- Call to Action -->
+<!-- Newsletter Section -->
 {% if not request.user.is_authenticated %}
-<section class="cta-section py-5 bg-primary text-white text-center">
+<section class="newsletter-section py-5 text-white">
     <div class="container">
-        <h2 class="display-4 mb-4">¿Listo para empezar?</h2>
-        <p class="lead mb-4">Únete a miles de clientes satisfechos y experimenta la diferencia con Gestión de Pedidos.</p>
-        <a href="{% url 'account_signup' %}" class="btn btn-light btn-lg">Crear una cuenta</a>
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="display-4 mb-4 font-serif">Únete a nuestra comunidad gourmet</h2>
+                <p class="lead mb-4">Sé el primero en conocer nuestras creaciones exclusivas, eventos especiales y ofertas únicas. Déjanos endulzar tu bandeja de entrada.</p>
+            </div>
+            <div class="col-lg-6">
+                <div class="card border-0 shadow">
+                    <div class="card-body p-4">
+                        <h3 class="h4 mb-3 font-serif text-primary">Suscríbete a nuestro newsletter</h3>
+                        <form class="mb-3">
+                            <div class="mb-3">
+                                <input type="email" class="form-control form-control-lg" placeholder="Tu correo electrónico" required>
+                            </div>
+                            <div class="mb-3">
+                                <select class="form-select form-select-lg" required>
+                                    <option value="" selected disabled>Elige tus preferencias</option>
+                                    <option value="all">Todas las novedades</option>
+                                    <option value="seasonal">Colecciones de temporada</option>
+                                    <option value="events">Eventos y talleres</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg w-100">Suscribirse</button>
+                        </form>
+                        <p class="small text-muted mb-0">Al suscribirte, aceptas nuestra política de privacidad y términos de servicio.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 {% endif %}
 {% endblock %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'proyectowebapp/css/base.css' %}">
-{% endblock %}

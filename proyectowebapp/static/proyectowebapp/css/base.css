@@ -1,78 +1,252 @@
 :root {
-    --primary-color: #007bff;
-    --secondary-color: #6c757d;
-    --success-color: #28a745;
-    --info-color: #17a2b8;
-    --warning-color: #ffc107;
-    --danger-color: #dc3545;
-    --light-color: #f8f9fa;
-    --dark-color: #343a40;
+    --primary-color: #8B4513;
+    --secondary-color: #D2691E;
+    --accent-color: #FFD700;
+    --background-color: #FFF8DC;
+    --text-color: #4A4A4A;
+    --light-color: #FFFFFF;
+    --dark-color: #2C2C2C;
 }
 
 body {
-    font-family: 'Raleway', sans-serif;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    font-family: 'Lato', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.8;
 }
 
-main {
-    flex: 1 0 auto;
+.font-serif {
+    font-family: 'Playfair Display', serif;
 }
 
-.navbar-nav .nav-link {
-    position: relative;
-    transition: color 0.3s ease-in-out;
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
 }
 
-.navbar-nav .nav-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: var(--primary-color);
-    transition: width 0.3s ease-in-out;
+.navbar {
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
 }
 
-.navbar-nav .nav-link:hover::after,
-.navbar-nav .nav-item.active .nav-link::after {
-    width: 100%;
+.navbar-brand {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--primary-color) !important;
 }
 
-.btn-floating {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+.nav-link {
+    color: var(--text-color) !important;
+    font-weight: 500;
+    transition: color 0.3s ease;
 }
 
-.btn-floating.show {
-    opacity: 1;
+.nav-link:hover, .nav-link.active {
+    color: var(--primary-color) !important;
 }
 
 .hero-section {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{% static "proyectowebapp/img/hero-bg.jpg" %}') no-repeat center center;
-    background-size: cover;
+    background-color: var(--light-color);
+}
+
+.hero-sections {
+    background-color: var(--light-color);
+}
+
+.hero-image {
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: var(--light-color);
+}
+
+.featured-products {
+    background-color: var(--light-color);
+}
+
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.product-card img {
+    height: 250px;
+    object-fit: cover;
+}
+
+.our-philosophy {
+    background-color: var(--background-color);
+}
+
+.testimonials-section {
+    background-color: var(--light-color);
+}
+
+.testimonial-card {
+    border-radius: 15px;
+}
+
+.newsletter-section {
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+}
+
+.footer {
+    background-color: var(--dark-color);
     color: var(--light-color);
 }
 
 .footer-link {
     color: var(--light-color);
-    transition: color 0.3s ease-in-out;
+    transition: color 0.3s ease;
 }
 
 .footer-link:hover {
-    color: var(--primary-color);
+    color: var(--accent-color);
+    text-decoration: none;
 }
 
-.transition-hover {
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+@media (max-width: 768px) {
+    .hero-section {
+        text-align: center;
+    }
+    
+    .hero-image {
+        height: 300px;
+    }
 }
-.transition-hover:hover {
+
+/* Additional styles for a more luxurious look */
+.shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.bg-light {
+    background-color: #F8F9FA !important;
+}
+
+.form-control-lg {
+    border-radius: 30px;
+}
+
+.btn-lg {
+    border-radius: 30px;
+    padding: 0.75rem 1.5rem;
+}
+
+.display-3, .display-4 {
+    font-weight: 300;
+}
+
+.lead {
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+.our-philosophy {
+    background-color: var(--background-color);
+}
+
+.our-philosophy img {
+    border: 10px solid var(--light-color);
+}
+
+.rounded-top-left {
+    border-top-left-radius: 0.25rem;
+}
+
+.awards-section {
+    background-color: var(--light-color);
+}
+
+.awards-section img {
+    max-width: 120px;
+    transition: transform 0.3s ease;
+}
+
+.awards-section img:hover {
+    transform: scale(1.1);
+}
+
+.testimonials-section {
+    background-color: var(--background-color);
+}
+
+.testimonial-card {
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
+
+.newsletter-section {
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    position: relative;
+    overflow: hidden;
+}
+
+.newsletter-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://images.unsplash.com/photo-1555507036-ab1f4038808a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+    opacity: 0.1;
+    z-index: 0;
+}
+
+.newsletter-section .container {
+    position: relative;
+    z-index: 1;
+}
+
+.newsletter-section .card {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.text-warning {
+    color: var(--accent-color) !important;
+}
+
+@media (max-width: 768px) {
+    .awards-section .col-6 {
+        width: 50%;
+    }
+}
+
+/* Add Font Awesome for the star icons */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
