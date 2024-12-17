@@ -2,168 +2,23 @@
 {% load static %}
 
 {% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <link rel="stylesheet" href="{% static 'proyectowebapp/css/tienda.css' %}">
-<style>
-    /* Colores base y tipografía */
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f8f9fc;
-        color: #343a40;
-    }
-
-    .card-title.prod {
-        font-weight: bold;
-        color: #343a40;
-    }
-
-    /* Tarjetas de Productos */
-    .card {
-        border: 0;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .card:hover {
-        transform: scale(1.03);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .card-img-top {
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        height: 200px;
-        object-fit: cover;
-    }
-
-    .card-title.prod {
-        color: #007bff;
-    }
-
-    .card-text {
-        color: #28a745;
-        font-weight: 500;
-    }
-
-    /* Botones */
-    .btn {
-        border-radius: 8px;
-        padding: 10px 16px;
-        transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-        border: 0;
-    }
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-        transform: scale(1.05);
-    }
-
-    .btn-success {
-        background-color: #28a745;
-        border: 0;
-    }
-
-    .btn-success:hover {
-        background-color: #218838;
-        transform: scale(1.05);
-    }
-
-    .btn-danger {
-        background-color: #dc3545;
-        border: 0;
-    }
-
-    .btn-danger:hover {
-        background-color: #c82333;
-        transform: scale(1.05);
-    }
-
-    /* Modal */
-    .modal-content {
-        border-radius: 12px;
-        border: none;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .modal-header {
-        background-color: #007bff;
-        color: #fff;
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
-    }
-
-    .modal-body {
-        background-color: #f8f9fa;
-        padding: 30px;
-    }
-
-    /* Formulario */
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-control {
-        border-radius: 5px;
-        padding: 10px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-    }
-
-    /* Iconos de Carrito y Mensajes */
-    .alert-warning {
-        display: flex;
-        align-items: center;
-    }
-
-    .alert-warning i {
-        margin-right: 8px;
-    }
-
-    /* Animaciones */
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .modal-content,
-    .card,
-    .btn {
-        animation: fadeIn 0.5s ease-in-out;
-    }
-</style>
 {% endblock %}
 
 {% block content %}
-<!-- Enlace al carrito en la parte superior de la página -->
-<div class="container py-2 text-end">
-    <a href="{% url 'carro:cart_view' %}" class="btn btn-primary">
-        <i class="fas fa-shopping-cart"></i> 
-        Ver Carrito (<span class="cart-count">0</span>)
-    </a>
-</div>
-
 <div class="container py-5">
-    <h1 class="text-primary mb-4">Nuestros Productos</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-primary">Nuestros Productos</h1>
+        <a href="{% url 'carro:cart_view' %}" class="btn btn-primary">
+            <i class="fas fa-shopping-cart me-2"></i>Ver Carrito (<span class="cart-count">{{ request.session.carro|length }}</span>)
+        </a>
+    </div>
+
     <div class="row">
-        <div class="col-lg-3 mt-4 mt-lg-0">
-            <div class="card-body" id="cart-widget">
+        <div class="col-lg-3 mb-4">
+            <div id="cart-widget">
                 {% include "carro/widget.html" %}
             </div>
         </div>
@@ -172,33 +27,36 @@
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                 {% for producto in productos %}
                 <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <img src=" /media/{{ producto.imagen }}" class="card-img-top" alt="{{ producto.nombre }}">
+                    <div class="card h-100">
+                        <img src="/media/{{ producto.imagen }}" class="card-img-top" alt="{{ producto.nombre }}">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title prod">{{ producto.nombre }}</h5>
                             <p class="card-text mb-4">{{ producto.precio }} ₲</p>
                             <div class="mt-auto text-center">
                                 {% if request.user.is_authenticated %}
-                                <button type="button" class="btn btn-success add-to-cart"
-                                    data-product-id="{{ producto.id }}">
+                                <button type="button" class="btn btn-success add-to-cart" data-product-id="{{ producto.id }}">
                                     <i class="fas fa-cart-plus me-2"></i>Agregar al carrito
                                 </button>
+                                {% else %}
+                                <a href="{% url 'login' %}" class="btn btn-primary">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Iniciar sesión para comprar
+                                </a>
                                 {% endif %}
                             </div>
                         </div>
                     </div>
                 </div>
                 {% empty %}
-                <div class="alert alert-info text-center" role="alert">
-                    <i class="fas fa-info-circle me-2"></i>No hay productos disponibles en este momento.
+                <div class="col-12">
+                    <div class="alert alert-info text-center" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>No hay productos disponibles en este momento.
+                    </div>
                 </div>
                 {% endfor %}
             </div>
         </div>
-
     </div>
 </div>
-
 {% endblock %}
 
 {% block extra_js %}
@@ -238,39 +96,35 @@ $(document).ready(function () {
         }, 3000);
     };
 
-    // Manejo del clic en "Agregar al carrito"
     $(".add-to-cart").on("click", function () {
-        const productId = $(this).data("product-id");
+    const productId = $(this).data("product-id");
 
-        $.ajax({
-            url: "{% url 'carro:agregar' 0 %}".replace("0", productId),
-            type: "POST",
-            data: {
-                csrfmiddlewaretoken: "{{ csrf_token }}",
-            },
-            success: function (response) {
-                if (response.success) {
-                    // Mostrar un mensaje de éxito
-                    showToast(response.message, "#4caf50");
+    $.ajax({
+        url: "{% url 'carro:agregar' 0 %}".replace("0", productId),
+        type: "POST",
+        data: {
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        success: function (response) {
+            if (response.success) {
+                // Mostrar un mensaje de éxito
+                showToast(response.message, "#4caf50");
 
-                    // Actualizar el widget del carrito y el número de productos
-                    $("#cart-widget").load(location.href + " #cart-widget > *");
-                    
-                    // Actualizar el número de productos en el carrito
-                    $(".cart-count").text(response.total_productos);  // Suponiendo que tienes un elemento con clase 'cart-count'
-                } else {
-                    // Mostrar un mensaje de error
-                    showToast(response.message, "#f44336");
-                }
-            },
-            error: function () {
-                // Manejo de errores en la solicitud AJAX
-                showToast("No se pudo agregar el producto al carrito.", "#f44336");
+                // Actualizar el contador del carrito
+                $(".cart-count").text(response.total_productos);
+            } else {
+                // Mostrar un mensaje de error
+                showToast(response.message, "#f44336");
             }
-        });
+        },
+        error: function () {
+            // Manejo de errores en la solicitud AJAX
+            showToast("No se pudo agregar el producto al carrito.", "#f44336");
+        }
     });
 });
 
-</script>
 
+});
+</script>
 {% endblock %}

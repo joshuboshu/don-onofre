@@ -1,38 +1,146 @@
-.hover-effect {
-    transition: transform 0.3s ease-in-out;
+/* Base styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fc;
+    color: #343a40;
 }
 
-.hover-effect:hover {
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+}
+
+h1.text-primary {
+    color: #8B4513 !important; /* Tono marrón */
+}
+
+.card-title.prod {
+    font-weight: 600;
+    color: #343a40;
+}
+
+/* Layout */
+.container {
+    max-width: 1200px;
+}
+
+/* Product Cards */
+.card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
     transform: translateY(-5px);
 }
 
-.sticky-top {
-    z-index: 1020;
-}
-
-.card {
-    border: none;
-    border-radius: 10px;
-}
-
 .card-img-top {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    height: 250px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.card-body {
+    padding: 1.5rem;
+    background-color: #fff;
+}
+
+.card-title.prod {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #5D4037; /* Marrón más oscuro */
+}
+
+.card-text {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #8D6E63; /* Marrón más claro */
+}
+
+/* Buttons */
+.btn {
+    border-radius: 5px;
+    padding: 0.6rem 1.5rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: background-color 0.3s ease;
 }
 
 .btn-primary {
-    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+    background-color: #8B4513; /* Marrón principal */
+    border: none;
+    color: #fff;
 }
 
 .btn-primary:hover {
-    background-color: var(--bs-primary-dark);
-    border-color: var(--bs-primary-dark);
+    background-color: #A0522D; /* Marrón más claro al hover */
 }
 
-.card-title {
-    font-weight: 600;
+.btn-success {
+    background-color: #6D4C41; /* Marrón más oscuro */
+    border: none;
+    color: #fff;
 }
 
-.text-primary {
-    color: var(--bs-primary) !important;
+.btn-success:hover {
+    background-color: #795548; /* Marrón ligeramente más claro al hover */
 }
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-img-top {
+        height: 200px;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Toast styles */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 15px 20px;
+    background-color: #8B4513;
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateY(20px);
+    z-index: 999;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast.error {
+    background-color: #D32F2F; /* Rojo oscuro para errores */
+}
+
