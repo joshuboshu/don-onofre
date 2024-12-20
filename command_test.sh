@@ -13,8 +13,8 @@ docker compose -f docker-compose.test.yml up -d
 sleep 10
 
 # Ejecuta makemigrations y migrate en el entorno de pruebas
-docker compose -f docker-compose.test.yml exec web_test python manage.py makemigrations
-docker compose -f docker-compose.test.yml exec web_test python manage.py migrate
+docker compose -f docker-compose.test.yml exec web python manage.py makemigrations
+docker compose -f docker-compose.test.yml exec web python manage.py migrate
 
 # Abre automáticamente en el navegador la aplicación de pruebas (asegúrate de que coincida el puerto con .env.test)
 if command -v xdg-open &> /dev/null; then

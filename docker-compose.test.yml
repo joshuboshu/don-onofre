@@ -1,10 +1,10 @@
 version: '3.9'
 
 services:
-  db_test:
+  db:
     image: postgres:14
     restart: always
-    container_name: postgresql_test
+    container_name: postgresql
     volumes:
       - db-test-data:/var/lib/postgresql/data
     environment:
@@ -14,9 +14,9 @@ services:
     ports:
       - "5436:5432"  # Puerto mapeado de PostgreSQL (host:container)
 
-  web_test:
+  web:
     build: .
-    container_name: django_test
+    container_name: django
     command: python manage.py runserver 0.0.0.0:8002
     volumes:
       - .:/app  # Usa el directorio local
@@ -31,8 +31,8 @@ services:
     env_file:
       - .env.test
     depends_on:
-      - db_test
+      - db
 
 volumes:
-  db-test-data:
+  db-data:
 
