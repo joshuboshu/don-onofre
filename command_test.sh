@@ -1,20 +1,20 @@
 #!/bin/bash
 
-# Baja los contenedores de pruebas en caso de que ya estén corriendo
-docker compose -f docker-compose.test.yml down
+# Baja los contenedores en caso de que ya estén corriendo
+sudo docker compose down
 
-# Construye las imágenes de los servicios de pruebas
-docker compose -f docker-compose.test.yml build
+# Construye las imágenes de los servicios
+sudo docker compose build
 
-# Levanta los servicios de pruebas en segundo plano
-docker compose -f docker-compose.test.yml up -d
+# Levanta los servicios en segundo plano
+sudo docker compose up -d
 
-# Espera unos segundos para asegurarse de que el contenedor de la base de datos de pruebas esté listo
+# Espera unos segundos para asegurarse de que el contenedor de la base de datos esté listo
 sleep 10
 
-# Ejecuta makemigrations y migrate en el entorno de pruebas
-docker compose -f docker-compose.test.yml exec web python manage.py makemigrations
-docker compose -f docker-compose.test.yml exec web python manage.py migrate
+# Ejecuta makemigrations y migrate
+sudo docker compose exec web python manage.py makemigrations
+sudo docker compose exec web python manage.py migrate
 
 # Abre automáticamente en el navegador la aplicación de pruebas (asegúrate de que coincida el puerto con .env.test)
 if command -v xdg-open &> /dev/null; then
