@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  db_test:
+    image: postgres:14
+    restart: always
+    container_name: postgresql_test
+    volumes:
+      - db-test-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: prueba_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5436:5432"  # Puerto mapeado de PostgreSQL (host:container)
+
+  web_test:
+    build: .
+    container_name: django_test
+    command: python manage.py runserver 0.0.0.0:8002
+    volumes:
+      - .:/app  # Usa el directorio local
+    ports:
+      - "8002:8000"  # Mapea el puerto especificado en .env.test
+    environment:
+      - POSTGRES_NAME=prueba_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_HOST=db  # Asegura que el host sea el nombre del servicio de la base de datos
+      - POSTGRES_PORT=5432  # Puerto interno del contenedor de PostgreSQL
+    env_file:
+      - .env.test
+    depends_on:
+      - db_test
+
+volumes:
+  db-test-data:
+
