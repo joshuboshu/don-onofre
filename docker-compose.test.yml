@@ -6,7 +6,7 @@ services:
     restart: always
     container_name: postgresql
     volumes:
-      - db-test-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: prueba_db
       POSTGRES_USER: postgres
